@@ -115,7 +115,7 @@ class Sensitivity:
         theoretical_field = (0.8**1.5)*(4*np.pi*(10**(-7)))*(number_of_turns*current)/coil_radius
 
         square = (((current_uncertainty/current)**2)+((0.5*10**(-3)/coil_radius)**2))
-        self.field_uncertainty = np.sqrt(square)                  *theoretical_field
+        self.field_uncertainty = np.sqrt(square)*theoretical_field
 
         difference = (np.abs(theoretical_field-self.field))/self.field*100
         print(f'the % difference in theoretical and measured field is {difference}%')
@@ -133,8 +133,11 @@ class Sensitivity:
         '''
         
         uncertainty_in_sensor = 0.5
+
+        calib_path = Path(__file__).resolve().with_name('fake_data.csv')
+        self.calibration_data = pd.read_csv(calib_path)
         
-        self.calibration_data = read_data(self.port, self.filename, self.samples)
+        #self.calibration_data = read_data(self.port, self.filename, self.samples)
         uncertainty_sen_frame = self.calibration_data
         
         self.sensitivities = [0]*self.number
@@ -148,7 +151,7 @@ class Sensitivity:
             reading_uncertainty = ((np.sqrt(((uncertainty_in_sensor)**2)+(self.stds[x])**2))/average_sen_data)**2
             rooted = np.sqrt(reading_uncertainty+vcc_uncertainty)
         
-            average_voltage_value = (self.calibration_data[self.calibration_data.columns[x+1]]*self.vcc/self.bits).mean()
+            average_voltage_value = np.mean(self.calibration_data[self.calibration_data.columns[x+1]]*self.vcc/self.bits)
         
             uncertainty_in_volt = rooted*average_voltage_value
             uncertainty_in_volt_nulls = (np.sqrt(((uncertainty_in_volt)**2)+((self.nulls_uncertainties[x])**2)))
@@ -160,7 +163,7 @@ class Sensitivity:
             fourth = ((self.field_uncertainty)/self.field)**2
             rooted2 = np.sqrt(third+fourth)
         
-            self.sensitivities[x] = ((self.calibration_data[self.calibration_data.columns[x+1]].mean())/self.field)*1000
+            self.sensitivities[x] = ((self.calibration_data[self.calibration_data.columns[x+1]].mean())/self.field)*100
             self.uncertainty_in_sens[x] = rooted2*self.sensitivities[x]
 
         self.saves_sens()
