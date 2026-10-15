@@ -68,3 +68,8 @@ The transmission of the field data from the sensors will be done at the same tim
 Will design the setup for the Mini-Mera magnets first and try to get this strange ‘shelf’ thing to work with the three dimensional sensors coming out of it.    
 
 The capacitors will be soldiered onto the pins on the hall effect sensor and fed through the holes so the sensor can sit on the shelf.   
+
+-------------------------------------------------------------------------------------------------------------------------------------
+### New Circuit Schematic
+<img width="1305" height="912" alt="image" src="https://github.com/user-attachments/assets/32f719be-464a-477a-a71a-fc8542608ea8" />
+

@@ -1,0 +1,30 @@
+{
+
+    "sensors": [
+        {
+            "number": "1",
+            "I2C channel": "0",
+            "ADC ADDR": "0x48",
+            "ADC Pin": "A0",
+            "coordinate": "0,0",
+            "direction": "x"
+        },
+        {
+            "number": "2",
+            "I2C channel": "0",
+            "ADC ADDR": "0x48",
+            "ADC Pin": "A1",
+            "coordinate": "0,0",
+            "direction": "y"
+        },
+        {
+            "number": "3",
+            "I2C channel": "0",
+            "ADC ADDR": "0x48",
+            "ADC Pin": "A2",
+            "coordinate": "0,0",
+            "direction": "z"
+        }
+    ]
+}
+

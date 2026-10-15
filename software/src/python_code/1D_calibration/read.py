@@ -2,8 +2,8 @@
 
 import csv
 from pathlib import Path
-import serial
 import time
+import serial
 import pandas as pd
 
 

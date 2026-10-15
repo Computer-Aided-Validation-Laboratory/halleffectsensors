@@ -85,12 +85,12 @@ class Conversion:
         sens_path = Path(__file__).resolve().with_name('sens.csv')
         sens_df = pd.read_csv(sens_path)
         for i in range(self.number):
-            self.sensitivities[i] = sens_df[sens_df.columns[i]].mean()
+            self.sensitivities[i] = np.mean(sens_df[sens_df.columns[i]].abs())
 
         sens_uncertainties_path = Path(__file__).resolve().with_name('uncertainties.csv')
         uncertainties_df = pd.read_csv(sens_uncertainties_path)
         for i in range(self.number):
-            self.sensitivities_uncertainties[i] = uncertainties_df[uncertainties_df.columns[i]].mean()
+            self.sensitivities_uncertainties[i] = np.mean((uncertainties_df[uncertainties_df.columns[i]]).abs())
 
         std_path = Path(__file__).resolve().with_name('stds.csv')
         std_df = pd.read_csv(std_path)
