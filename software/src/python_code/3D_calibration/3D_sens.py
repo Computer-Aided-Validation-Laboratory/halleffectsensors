@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from func import split_data
 
-class Sensitivity:
+class Sensitivities:
     '''ds'''
 
     def __init__(self, number: int, port: str, vcc: float, vcc_un: float, filename: str,
@@ -190,8 +190,8 @@ class Sensitivity:
             self.perform_calibration_z()
 
         self.saving_sens()
-    
+
 if __name__ == '__main__':
-    x = Sensitivity(number = 6, port = '/dev/ttyUSB0', vcc = 5.0, vcc_un = 0.05,
+    x = Sensitivities(number = 6, port = '/dev/ttyUSB0', vcc = 5.0, vcc_un = 0.05,
                     filename = 'calibration_field_1.csv', resolution = 10,
                     samples = 400, calibration_field = [34,35,34], field_abs_un = 0.05)
