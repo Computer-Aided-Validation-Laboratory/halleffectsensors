@@ -82,7 +82,7 @@ class Sensitivities:
         for i in range(int(self.number/3)):
             self.x[self.x.columns[i+1]] = self.x[self.x.columns[i+1]]*self.vcc/self.bits
             self.x[self.x.columns[i+1]] -= self.x_nulls[i]
-            self.x_sens[i] = np.mean((self.x[self.x.columns[i+1]]/self.calibration_field[0])*1000)
+            self.x_sens[i] = np.mean((self.x[self.x.columns[i+1]]/self.calibration_field[0])*1000000)
 
             average_count = np.mean(x_data_un[x_data_un.columns[i+1]])
             count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.x_stds[i])**2))/average_count)**2
@@ -104,7 +104,7 @@ class Sensitivities:
         for i in range(int(self.number/3)):
             self.y[self.y.columns[i+1]] = self.y[self.y.columns[i+1]]*self.vcc/self.bits
             self.y[self.y.columns[i+1]] -= self.y_nulls[i]
-            self.y_sens[i] = np.mean((self.y[self.y.columns[i+1]]/self.calibration_field[1])*1000)
+            self.y_sens[i] = np.mean((self.y[self.y.columns[i+1]]/self.calibration_field[1])*1000000)
 
             average_count = np.mean(y_data_un[y_data_un.columns[i+1]])
             count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.y_stds[i])**2))/average_count)**2
@@ -126,7 +126,7 @@ class Sensitivities:
         for i in range(int(self.number/3)):
             self.z[self.z.columns[i+1]] = self.z[self.z.columns[i+1]]*self.vcc/self.bits
             self.z[self.z.columns[i+1]] -= self.z_nulls[i]
-            self.z_sens[i] = np.mean((self.z[self.z.columns[i+1]]/self.calibration_field[2])*1000)
+            self.z_sens[i] = np.mean((self.z[self.z.columns[i+1]]/self.calibration_field[2])*1000000)
 
             average_count = np.mean(z_data_un[z_data_un.columns[i+1]])
             count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.z_stds[i])**2))/average_count)**2
