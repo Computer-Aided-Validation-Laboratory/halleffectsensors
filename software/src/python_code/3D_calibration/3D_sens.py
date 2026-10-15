@@ -5,7 +5,7 @@ import pandas as pd
 from func import split_data
 
 class Sensitivities:
-    '''ds'''
+    '''need to start doing the docstrings for all three scripts'''
 
     def __init__(self, number: int, port: str, vcc: float, vcc_un: float, filename: str,
                  resolution: int, samples: int, calibration_field: np.array, field_abs_un: float):
