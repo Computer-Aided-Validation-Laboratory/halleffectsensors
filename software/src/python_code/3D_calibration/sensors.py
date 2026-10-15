@@ -482,7 +482,3 @@ class Convert:
         print(field_display_y)
         print("z-fields")
         print(field_display_z)
-
-
-
-
