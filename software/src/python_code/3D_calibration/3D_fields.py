@@ -6,8 +6,40 @@ from func import split_data
 class Fields:
     '''
     class for converting the raw data from the hall effect sensors into useful field strength
-    measurements.
-    converts for a 3D sensor array and produces 3 different data sets of field measurements
+    measurements. takes the sensitivities and null voltages calculated during the calibration
+    of the array and uses them. converts each direction of sensor individually to produce three
+    data frames with field strength information for x, y, z fields.
+
+    Attributes:
+        number (int): number of sensors in array
+        port (str): the computer port that the array is connected to
+        filename (str): the name of the file that the data is stored under
+        vcc (float): the vcc of the power source powering the sensor
+        vcc_un (float): the uncertainty in the measurement of vcc of the power source
+        resolution (int): the resolution (bit-depth) of the ADC used in the array
+        samples (int): the number of samples for each measurement
+
+    Methods:
+        define() -> None:
+            defines all the nulls/sens/uncertainties/stds variables that will be imported
+            and saved from other classes
+        get_params() -> None:
+            gets the values of the variables defined in the previous method
+        data_split() -> None:
+            uses the `split_data` function to separate the incoming data being read from
+            the sensor array into x, y and z directional data frames
+        into_voltage() -> None:
+            converts the incoming data into voltages by multiplying them by a scale factor
+            and then subtracting the null voltage of each sensor from that sensors data. also
+            tracks the uncertainties through this calculation
+        field_strengths() -> None:
+            converts the voltages into field strengths by multiplying each sensor by the
+            previously calculated values for sensitivities for that sensor. also calculates
+            the overall uncertainty in the field strength measurement
+        house_keeping() -> None:
+            customises the output data frames to make them easier to read, changes the column
+            titles and converts the time into s from ms. displays the uncertainty in each
+            measurement next to the field result
     '''
     def __init__(self, number: int, port: str, filename: str, vcc: float,
                  vcc_un: float, resolution: int, samples: int = 400):
@@ -22,6 +54,7 @@ class Fields:
         self.x_nulls = None
         self.y_nulls = None
         self.z_nulls = None
+
         self.x_nulls_un = None
         self.y_nulls_un = None
         self.z_nulls_un = None
@@ -57,7 +90,14 @@ class Fields:
 
 
     def define(self) -> None:
-        '''ds'''
+        '''
+        defines all the nulls/sens/uncertainties/stds variables that will be imported
+        and saved from other classes
+        Args:
+            None
+        Retruns:
+            None        
+        '''
 
         self.x_nulls = np.empty(int(self.number/3))
         self.y_nulls = np.empty(int(self.number/3))
@@ -82,8 +122,13 @@ class Fields:
         self.get_params()
 
     def get_params(self) -> None:
-        '''get all parameters for each sensor in each direction (nulls & uncertainties,
-        stds, sensitivities & uncertainties)'''
+        '''
+        gets the values of the variables defined in the previous method
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         csv_folder_path = Path(__file__).parent / 'csv'
         nulls_and_uncertainties_df = pd.read_csv(csv_folder_path/'nulls_and_uncertainties.csv',
@@ -123,14 +168,29 @@ class Fields:
         self.data_split()
 
     def data_split(self) -> None:
-        '''reads and splits dataset'''
+        '''
+        uses the `split_data` function to separate the incoming data being read from
+        the sensor array into x, y and z directional data frames
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.x, self.y, self.z = split_data(self.port, self.filename, self.samples, self.number)
 
         self.into_voltage()
 
     def into_voltage(self) -> None:
-        '''do the first part of conversion and uncertainties'''
+        '''
+        converts the incoming data into voltages by multiplying them by a scale factor
+        and then subtracting the null voltage of each sensor from that sensors data. also
+        tracks the uncertainties through this calculation
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.x_voltage_un = np.empty(int(self.number/3))
         self.y_voltage_un = np.empty(int(self.number/3))
@@ -184,7 +244,15 @@ class Fields:
         self.field_strengths()
 
     def field_strengths(self) -> None:
-        '''ds'''
+        '''
+        converts the voltages into field strengths by multiplying each sensor by the
+        previously calculated values for sensitivities for that sensor. also calculates
+        the overall uncertainty in the field strength measurement
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.x_field_un = np.empty(int(self.number/3))
         self.y_field_un = np.empty(int(self.number/3))
@@ -217,10 +285,18 @@ class Fields:
             z_sens_un = (self.z_sens_un[i]/np.mean(self.z_sens))**2
             self.z_field_un[i] = z_average_field*(np.sqrt((z_voltage_un)+(z_sens_un)))
 
-        self.housekeeping()
+        self.house_keeping()
 
-    def housekeeping(self) -> None:
-        '''ds'''
+    def house_keeping(self) -> None:
+        '''
+        customises the output data frames to make them easier to read, changes the column
+        titles and converts the time into s from ms. displays the uncertainty in each
+        measurement next to the field result
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         new_cols = ['time/s']
         new_cols.extend([f'field_strength_S{i}/mT' for i in range(1, (int(self.number/3)+1))])
@@ -251,8 +327,8 @@ class Fields:
             self.z[z_column] = self.z[z_column].apply(lambda x: f'{x:.3f} ± {abs(x*z_relative_uncertainty[i]):.3f}')
 
         print(self.x)
-        # print(self.y)
-        # print(self.z)
+        print(self.y)
+        print(self.z)
 
 if __name__ == '__main__':
     x = Fields(number = 6, port = '/dev/ttyUSB0', filename = 'test_1.csv',

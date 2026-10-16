@@ -6,7 +6,32 @@ from func import split_data
 
 
 class Nulls:
-    '''ds'''
+    '''
+    class to calculate the null voltage and the associated uncertainties of each sensor in the array. 
+    also calculates the standard deviations for each sensor. the data is split directionally by the 
+    imported function `split_data`.
+
+    Attributes
+        number (int): the number of sensors present in the array (total for all directions)
+        port (str): the computer port that the array connects to
+        vcc (float): the vcc of the Arduino (voltage into array)
+        filename (str): filename that the recorded data is stored under
+        vcc_un (float): the uncertainty in the measurement of vcc
+        resolution (int): the resolution of the ADC that is used
+        samples (int): the number of samples taken in each measurement
+
+    Methods:
+        get_frames() -> None: 
+            splits the incoming data into x, y and z data frames by using the imported function
+        find_nulls() -> None:
+            calculates the null voltages for each sensor in each data frame and stores them. also
+            calculates the standard deviations for each sensor and stores them
+        uncertainties_in_nulls() -> None:
+            calculates the associated uncertainties with each null voltage calculation
+        saving_values() -> None:
+            saves the values calculated in this class in csvs so that they can be used later on
+
+    '''
 
     def __init__(self, number: int, port: str, vcc: float, filename: str,
                  vcc_un: float, resolution: int, samples: int = 400):
@@ -27,14 +52,28 @@ class Nulls:
         self.get_frames()
 
     def get_frames(self) -> None:
-        '''ds'''
+        '''
+        method that calls the data splitting function `split_data` and saves the 
+        directional data frames to be used throughout this class.
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.x, self.y, self.z = split_data(self.port, self.filename, self.samples, self.number)
 
         self.find_nulls()
 
     def find_nulls(self) -> None:
-        '''ds'''
+        '''
+        method for calculating the null voltages of each sensor and the standard deviation
+        at the same time. stores the answers in different numpy arrays
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.nulls_x_df = pd.DataFrame(np.zeros((2, int(self.number/3))), dtype = float)
         self.nulls_y_df = pd.DataFrame(np.zeros((2, int(self.number/3))), dtype = float)
@@ -43,6 +82,7 @@ class Nulls:
         self.x_nulls = np.empty(int(self.number/3))
         self.y_nulls = np.empty(int(self.number/3))
         self.z_nulls = np.empty(int(self.number/3))
+
         self.x_stds = np.empty(int(self.number/3))
         self.y_stds = np.empty(int(self.number/3))
         self.z_stds = np.empty(int(self.number/3))
@@ -63,7 +103,14 @@ class Nulls:
         self.uncertainties_in_nulls()
 
     def uncertainties_in_nulls(self) -> None:
-        '''ds'''
+        '''
+        method for calculating the uncertainty in the null voltage of each sensor in the array
+        and stores the values
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.x_nulls_un = np.empty(int(self.number/3))
         self.y_nulls_un = np.empty(int(self.number/3))
@@ -88,7 +135,15 @@ class Nulls:
         self.saving_values()
 
     def saving_values(self) -> None:
-        '''ds'''
+        '''
+        method for saving the values calculated in this class to csvs
+        so that they can be used in other scripts for calibration or for
+        conversion
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         file_dir = (Path(__file__).parent / 'csv')
         output_nulls = file_dir/'nulls_and_uncertainties.csv'
@@ -99,6 +154,7 @@ class Nulls:
             writer_obj.writerow(self.x_nulls)
             writer_obj.writerow(self.y_nulls)
             writer_obj.writerow(self.z_nulls)
+
             writer_obj.writerow(self.x_nulls_un)
             writer_obj.writerow(self.y_nulls_un)
             writer_obj.writerow(self.z_nulls_un)

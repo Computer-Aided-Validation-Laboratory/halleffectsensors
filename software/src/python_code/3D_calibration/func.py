@@ -7,9 +7,17 @@ import serial
 import pandas as pd
 import numpy as np
 
-def read_data(port: str, filename: str, samples: int=400) -> None:
+def read_data(port: str, filename: str, samples: int = 400) -> None:
     '''
-    docstring
+    method for reading data from the sensor array from the Arduino. uses the
+    serial library to read in the data, opens a csv and stores the data in
+    that csv.
+    Args:
+        port (str): the computer port that the sensor array is connected to
+        filename (str): the name of the file that the data is stored under
+        samples (int): how many data samples are read in
+    Returns:
+        None
     '''
     ser = serial.Serial(port, 9600)
     ser.reset_input_buffer()
@@ -48,7 +56,25 @@ def read_data(port: str, filename: str, samples: int=400) -> None:
     return df
 
 def split_data(port: str, filename: str, samples: int, number: int) -> pd.DataFrame:
-    '''ds'''
+    '''
+    method that imports a json file containing the information about each sensor. uses
+    this information to sort through the columns of the incoming data and separate it
+    depending on the direction the sensor faced (found in the .json). Runs the method
+    above (`read_data`) so that when this method is called both will run
+    Args:
+        port (str): the computer port that the sensor array is connected to
+        filename (str): the name of the csv file that the data that is read in is
+            stored in
+        samples (int): the number of samples taken
+        number (int): the number of sensors present in the array
+    Returns:
+        x_data (pd.DataFrame): the data frame containing all the data coming in from
+            sensors facing in the 'x' direction
+        y_data (pd.DataFrame):the data frame containing all the data coming in from
+            sensors facing in the 'y' direction
+        z_data (pd.DataFrame):the data frame containing all the data coming in from
+            sensors facing in the 'z' direction
+    '''
 
     path_json = Path(__file__).parent
     output_json = path_json/'json.json'

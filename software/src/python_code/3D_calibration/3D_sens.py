@@ -5,7 +5,45 @@ import pandas as pd
 from func import split_data
 
 class Sensitivities:
-    '''need to start doing the docstrings for all three scripts'''
+    '''
+    class for calibrating the sensors in a magnetic field. this calculates the
+    sensitivity of each sensor in the array by comparing it to the field that 
+    correlates to the direction the sensor is pointing. also calculates the associated
+    uncertainty with each calculation. these values are stored similarly to in the
+    Nulls class.
+
+    Attributes:
+        number (int): the number of sensors in the array
+        port (str): the computer port that the sensor array is connected to
+        vcc (float): the vcc of the power source powering the sensor array
+        vcc_un (float): the uncertainty in the vcc measurement
+        filename (str): the filename the calibration data is stored under
+        resolution (int): the resolution of the ADC used in the circuit
+        samples (int): the number of samples collected in each measurement
+        calibration_field (np.array): the field that the sensors are calibrated
+            against
+        field_abs_un (float): the uncertainty in the measurement of the value of the
+            calibration field
+
+    Methods:
+        get_params() -> None: 
+            imports values calculated in other scripts like the null voltages, the
+            noise of each sensor (std) and the uncertainties in each measurement and
+            saves them as arrays to be used in this class
+        current_comparison() -> None:
+            takes inputs for the coil properties and calculates what the outputted
+            magnetic field should be so that it can be compared to what is detected
+            by the probe.
+        perform_calibration_x() -> None:
+            calibrates all the directionally 'x' sensors in the array against the x
+            calibration field.
+        perform_calibration_y() -> None:
+            calibrates all the directionally 'y' sensors in the array against the y
+            calibration field.
+        perform_calibration_z() -> None:
+            calibrates all the directionally 'z' sensors in the array against the z
+            calibration field.        
+    '''
 
     def __init__(self, number: int, port: str, vcc: float, vcc_un: float, filename: str,
                  resolution: int, samples: int, calibration_field: np.array, field_abs_un: float):
@@ -36,7 +74,15 @@ class Sensitivities:
         self.x_stds = self.y_stds = self.z_stds = None
 
     def get_params(self) -> None:
-        '''ds'''
+        '''
+        imports values calculated in other scripts like the null voltages, the
+        noise of each sensor (std) and the uncertainties in each measurement and
+        saves them as arrays to be used in this class.
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.x, self.y, self.z = split_data(self.port, self.filename, self.samples, self.number)
 
@@ -72,11 +118,32 @@ class Sensitivities:
         self.running()
 
 
-    def current_comparison(self, current: float, current_abs_uncertainty: float, number_of_turns: int, coil_radius: float) -> None:
-        '''just for when i want to use this, might not be for a while.'''
+    def current_comparison(self, current: float, current_abs_uncertainty: float,
+                           number_of_turns: int, coil_radius: float) -> None:
+        '''
+        takes inputs for the coil properties and calculates what the outputted
+        magnetic field should be so that it can be compared to what is detected
+        by the probe.
+        Args:
+            current (float): input current into the calibration coils
+            current_abs_uncertainty (float): uncertainty in the measurement of
+                the current into the coils
+            number_of_turns (int): the number of turns in the calibration coils
+            coil_radius (float): the radius of the coils used for calibration
+        Returns:
+            None
+        '''
 
     def perform_calibration_x(self) -> None:
-        '''ds'''
+        '''
+        calibrates all the directionally 'x' sensors in the array against the x
+        calibration field. this is done by calculating the sensitivity of each sensor
+        and the associated uncertainty with each measurement.
+        Args:
+            None
+        Returns:
+            None
+        '''
         x_data_un = self.x.copy()
 
         for i in range(int(self.number/3)):
@@ -98,7 +165,15 @@ class Sensitivities:
 
         
     def perform_calibration_y(self) -> None:
-        '''ds'''
+        '''
+        calibrates all the directionally 'y' sensors in the array against the y
+        calibration field. this is done by calculating the sensitivity of each sensor
+        and the associated uncertainty with each measurement.
+        Args:
+            None
+        Returns:
+            None        
+        '''
         y_data_un = self.y.copy()
 
         for i in range(int(self.number/3)):
@@ -120,7 +195,15 @@ class Sensitivities:
 
 
     def perform_calibration_z(self) -> None:
-        '''ds'''
+        '''
+        calibrates all the directionally 'z' sensors in the array against the z
+        calibration field. this is done by calculating the sensitivity of each sensor
+        and the associated uncertainty with each measurement.
+        Args:
+            None
+        Returns:
+            None        
+        '''
         z_data_un = self.z.copy()
 
         for i in range(int(self.number/3)):
@@ -141,9 +224,17 @@ class Sensitivities:
             self.z_sens_un[i] = (np.sqrt(total_null_uncertainty+z_field_uncertainty))*self.z_sens[i]
 
     def saving_sens(self) -> None:
-        '''ds'''
+        '''
+        method that saves the calculated values of sensitivity and uncertainty in csvs so that 
+        they can be used in the conversion script. they are saved in csvs in a separate folder
+        to the code, in their own folder called 'csv'
+        Args:
+            None
+        Returns:
+            None
+        '''
 
-        file_dir = (Path(__file__).parent / 'csv')
+        file_dir = Path(__file__).parent / 'csv'
 
         x_output_sen = file_dir / 'x_sens.csv'
         y_output_sen = file_dir / 'y_sens.csv'
@@ -178,7 +269,15 @@ class Sensitivities:
             writer_obj.writerow(self.z_sens_un)
 
     def running(self) -> None:
-        '''ds'''
+        '''
+        method for running the calibration methods for each direction.
+        decided which ones to run based on if any of the field values are 0.
+        runs the saving script afterwards.
+        Args:
+            None
+        Returns:
+            None
+        '''
 
         self.get_params()
 
