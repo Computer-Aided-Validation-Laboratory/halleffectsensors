@@ -62,18 +62,33 @@ class Sensitivities:
         self.sensor_uncertainty = 0.5
         self.uncertainty_in_vcc = (self.vcc_uncertainty/self.vcc)**2
 
-        self.x_sens = np.empty(int(self.number/3))
-        self.y_sens = np.empty(int(self.number/3))
-        self.z_sens = np.empty(int(self.number/3))
+        self.x_sens = None
+        self.y_sens = None
+        self.z_sens = None
 
-        self.x_sens_un = np.empty(int(self.number/3))
-        self.y_sens_un = np.empty(int(self.number/3))
-        self.z_sens_un = np.empty(int(self.number/3))
+        self.x_sens_un = None
+        self.y_sens_un = None
+        self.z_sens_un = None
 
-        self.x = self.y = self.z = None
-        self.x_nulls = self.y_nulls = self.z_nulls = None
-        self.x_nulls_un = self.y_nulls_un = self.z_nulls_un = None
-        self.x_stds = self.y_stds = self.z_stds = None
+        self.x = None
+        self.y = None
+        self.z = None
+
+        self.x_nulls = None
+        self.y_nulls = None
+        self.z_nulls = None
+
+        self.x_nulls_un = None
+        self.y_nulls_un = None
+        self.z_nulls_un = None
+
+        self.x_stds = None
+        self.y_stds = None
+        self.z_stds = None
+
+        self.x_sensors = None
+        self.y_sensors = None
+        self.z_sensors = None
 
     def get_params(self) -> None:
         '''
@@ -86,19 +101,27 @@ class Sensitivities:
             None
         '''
 
-        self.x, self.y, self.z = split_data(self.port, self.filename, self.samples, self.number)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
 
-        self.x_nulls = np.empty(int(self.number/3))
-        self.y_nulls = np.empty(int(self.number/3))
-        self.z_nulls = np.empty(int(self.number/3))
+        self.x_nulls = np.empty(self.x_sensors)
+        self.y_nulls = np.empty(self.y_sensors)
+        self.z_nulls = np.empty(self.z_sensors)
 
-        self.x_nulls_un = np.empty(int(self.number/3))
-        self.y_nulls_un = np.empty(int(self.number/3))
-        self.z_nulls_un = np.empty(int(self.number/3))
+        self.x_nulls_un = np.empty(self.x_sensors)
+        self.y_nulls_un = np.empty(self.y_sensors)
+        self.z_nulls_un = np.empty(self.z_sensors)
 
-        self.x_stds = np.empty(int(self.number/3))
-        self.y_stds = np.empty(int(self.number/3))
-        self.z_stds = np.empty(int(self.number/3))
+        self.x_stds = np.empty(self.x_sensors)
+        self.y_stds = np.empty(self.y_sensors)
+        self.z_stds = np.empty(self.z_sensors)
+
+        self.x_sens = np.empty(self.x_sensors)
+        self.y_sens = np.empty(self.y_sensors)
+        self.z_sens = np.empty(self.z_sensors)
+
+        self.x_sens_un = np.empty(self.x_sensors)
+        self.y_sens_un = np.empty(self.y_sensors)
+        self.z_sens_un = np.empty(self.z_sensors)
 
         path_nulls_uncertainties = Path(__file__).parent / 'csv'
         parameters_df = pd.read_csv(path_nulls_uncertainties / 'nulls_and_uncertainties.csv', header = None)
@@ -138,22 +161,22 @@ class Sensitivities:
         x_expected_field = (0.8**1.5)*(4*np.pi*(10**(-7)))*(number_of_turns*current[0])/coil_radius
         x_square = ((current_abs_uncertainty/current[0])**2)+((0.5*10**(-3)/coil_radius)**2)
         x_field_uncertainty = np.sqrt(x_square)*x_expected_field
-        x_diff = (np.abs(x_expected_field-self.field[0]))/self.field[0]*100
-        print(f'expected field (x):{x_expected_field} ± {x_field_uncertainty}, actual field (x): {self.field[0]}')
+        x_diff = (np.abs(x_expected_field-self.calibration_field[0]))/self.calibration_field[0]*100
+        print(f'expected field (x):{x_expected_field} ± {x_field_uncertainty}, actual field (x): {self.calibration_field[0]}')
         print(f'% difference: {x_diff}')
 
         y_expected_field = (0.8**1.5)*(4*np.pi*(10**(-7)))*(number_of_turns*current[1])/coil_radius
         y_square = ((current_abs_uncertainty/current[1])**2)+((0.5*10**(-3)/coil_radius)**2)
         y_field_uncertainty = np.sqrt(y_square)*y_expected_field
-        y_diff = (np.abs(y_expected_field-self.field[1]))/self.field[1]*100
-        print(f'expected field (y):{y_expected_field} ± {y_field_uncertainty}, actual field (y): {self.field[1]}')
+        y_diff = (np.abs(y_expected_field-self.calibration_field[1]))/self.calibration_field[1]*100
+        print(f'expected field (y):{y_expected_field} ± {y_field_uncertainty}, actual field (y): {self.calibration_field[1]}')
         print(f'% difference: {y_diff}')
 
         z_expected_field = (0.8**1.5)*(4*np.pi*(10**(-7)))*(number_of_turns*current[2])/coil_radius
         z_square = ((current_abs_uncertainty/current[2])**2)+((0.5*10**(-3)/coil_radius)**2)
         z_field_uncertainty = np.sqrt(z_square)*z_expected_field
-        z_diff = (np.abs(z_expected_field-self.field[2]))/self.field[2]*100
-        print(f'expected field (z):{z_expected_field} ± {z_field_uncertainty}, actual field (z): {self.field[2]}')
+        z_diff = (np.abs(z_expected_field-self.calibration_field[2]))/self.calibration_field[2]*100
+        print(f'expected field (z):{z_expected_field} ± {z_field_uncertainty}, actual field (z): {self.calibration_field[2]}')
         print(f'% difference: {z_diff}')
 
         if self.calibration_field[0] != 0:
@@ -177,7 +200,7 @@ class Sensitivities:
         '''
         x_data_un = self.x.copy()
 
-        for i in range(int(self.number/3)):
+        for i in range(self.x_sensors):
             self.x[self.x.columns[i+1]] = self.x[self.x.columns[i+1]]*self.vcc/self.bits
             self.x[self.x.columns[i+1]] -= self.x_nulls[i]
             self.x_sens[i] = np.mean((self.x[self.x.columns[i+1]]/self.calibration_field[0])*1000000)
@@ -207,7 +230,7 @@ class Sensitivities:
         '''
         y_data_un = self.y.copy()
 
-        for i in range(int(self.number/3)):
+        for i in range(self.y_sensors):
             self.y[self.y.columns[i+1]] = self.y[self.y.columns[i+1]]*self.vcc/self.bits
             self.y[self.y.columns[i+1]] -= self.y_nulls[i]
             self.y_sens[i] = np.mean((self.y[self.y.columns[i+1]]/self.calibration_field[1])*1000000)
@@ -237,7 +260,7 @@ class Sensitivities:
         '''
         z_data_un = self.z.copy()
 
-        for i in range(int(self.number/3)):
+        for i in range(self.z_sensors):
             self.z[self.z.columns[i+1]] = self.z[self.z.columns[i+1]]*self.vcc/self.bits
             self.z[self.z.columns[i+1]] -= self.z_nulls[i]
             self.z_sens[i] = np.mean((self.z[self.z.columns[i+1]]/self.calibration_field[2])*1000000)

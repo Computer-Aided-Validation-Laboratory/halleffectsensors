@@ -44,11 +44,29 @@ class Nulls:
         self.bits = (2**resolution)-1
         self.samples = samples
 
-        self.x = self.y = self.z = None
-        self.nulls_x_df = self.nulls_y_df = self.nulls_z_df = None
-        self.x_stds = self.y_stds = self.z_stds = None
-        self.x_nulls = self.y_nulls = self.z_nulls = None
-        self.x_nulls_un = self.y_nulls_un = self.z_nulls_un = None
+        self.x = None
+        self.y = None
+        self.z = None
+
+        self.nulls_x_df = None
+        self.nulls_y_df = None
+        self.nulls_z_df = None
+
+        self.x_stds = None
+        self.y_stds = None
+        self.z_stds = None
+
+        self.x_nulls = None
+        self.y_nulls = None
+        self.z_nulls = None
+
+        self.x_nulls_un = None
+        self.y_nulls_un = None
+        self.z_nulls_un = None
+
+        self.x_sensors = None
+        self.y_sensors = None
+        self.z_sensors = None
 
         self.get_frames()
 
@@ -62,7 +80,7 @@ class Nulls:
             None
         '''
 
-        self.x, self.y, self.z = split_data(self.port, self.filename, self.samples, self.number)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
 
         self.find_nulls()
 
@@ -76,29 +94,31 @@ class Nulls:
             None
         '''
 
-        self.nulls_x_df = pd.DataFrame(np.zeros((2, int(self.number/3))), dtype = float)
-        self.nulls_y_df = pd.DataFrame(np.zeros((2, int(self.number/3))), dtype = float)
-        self.nulls_z_df = pd.DataFrame(np.zeros((2, int(self.number/3))), dtype = float)
+        self.nulls_x_df = pd.DataFrame(np.zeros((2, self.x_sensors)), dtype = float)
+        self.nulls_y_df = pd.DataFrame(np.zeros((2, self.y_sensors)), dtype = float)
+        self.nulls_z_df = pd.DataFrame(np.zeros((2, self.z_sensors)), dtype = float)
 
-        self.x_nulls = np.empty(int(self.number/3))
-        self.y_nulls = np.empty(int(self.number/3))
-        self.z_nulls = np.empty(int(self.number/3))
+        self.x_nulls = np.empty(self.x_sensors)
+        self.y_nulls = np.empty(self.y_sensors)
+        self.z_nulls = np.empty(self.z_sensors)
 
-        self.x_stds = np.empty(int(self.number/3))
-        self.y_stds = np.empty(int(self.number/3))
-        self.z_stds = np.empty(int(self.number/3))
+        self.x_stds = np.empty(self.x_sensors)
+        self.y_stds = np.empty(self.y_sensors)
+        self.z_stds = np.empty(self.z_sensors)
 
-        for i in range(int(self.number/3)):
+        for i in range(self.x_sensors):
             mean_x_entry = np.mean(self.x[self.x.columns[i+1]])
-            mean_y_entry = np.mean(self.y[self.y.columns[i+1]])
-            mean_z_entry = np.mean(self.z[self.z.columns[i+1]])
-
             self.x_nulls[i] = mean_x_entry*self.vcc/self.bits
-            self.y_nulls[i] = mean_y_entry*self.vcc/self.bits
-            self.z_nulls[i] = mean_z_entry*self.vcc/self.bits
-    
             self.x_stds[i] = np.std((self.x[self.x.columns[i+1]]), ddof=1)
+
+        for i in range(self.y_sensors):
+            mean_y_entry = np.mean(self.y[self.y.columns[i+1]])
+            self.y_nulls[i] = mean_y_entry*self.vcc/self.bits
             self.y_stds[i] = np.std((self.y[self.y.columns[i+1]]), ddof=1)
+
+        for i in range(self.z_sensors):
+            mean_z_entry = np.mean(self.z[self.z.columns[i+1]])
+            self.z_nulls[i] = mean_z_entry*self.vcc/self.bits
             self.z_stds[i] = np.std((self.z[self.z.columns[i+1]]), ddof=1)
 
         self.uncertainties_in_nulls()
@@ -113,24 +133,26 @@ class Nulls:
             None
         '''
 
-        self.x_nulls_un = np.empty(int(self.number/3))
-        self.y_nulls_un = np.empty(int(self.number/3))
-        self.z_nulls_un = np.empty(int(self.number/3))
+        self.x_nulls_un = np.empty(self.x_sensors)
+        self.y_nulls_un = np.empty(self.y_sensors)
+        self.z_nulls_un = np.empty(self.z_sensors)
 
         counts_absolute_uncertainty = 0.5
         uncetainty_in_vcc = (self.vcc_uncertainty/self.vcc)**2
 
-        for i in range(int(self.number/3)):
+        for i in range(self.x_sensors):
             average_sensor_x = np.mean(self.x[self.x.columns[i+1]])
-            average_sensor_y = np.mean(self.y[self.y.columns[i+1]])
-            average_sensor_z = np.mean(self.z[self.z.columns[i+1]])
-
             reading_un_x = ((np.sqrt((counts_absolute_uncertainty)**2+(self.x_stds[i])**2))/average_sensor_x)**2
-            reading_un_y = ((np.sqrt((counts_absolute_uncertainty)**2+(self.y_stds[i])**2))/average_sensor_y)**2
-            reading_un_z = ((np.sqrt((counts_absolute_uncertainty)**2+(self.z_stds[i])**2))/average_sensor_z)**2
-
             self.x_nulls_un[i] = ((np.sqrt(reading_un_x+uncetainty_in_vcc))*self.x_nulls[i])
+
+        for i in range(self.y_sensors):
+            average_sensor_y = np.mean(self.y[self.y.columns[i+1]])
+            reading_un_y = ((np.sqrt((counts_absolute_uncertainty)**2+(self.y_stds[i])**2))/average_sensor_y)**2
             self.y_nulls_un[i] = ((np.sqrt(reading_un_y+uncetainty_in_vcc))*self.y_nulls[i])
+
+        for i in range(self.z_sensors):
+            average_sensor_z = np.mean(self.z[self.z.columns[i+1]])
+            reading_un_z = ((np.sqrt((counts_absolute_uncertainty)**2+(self.z_stds[i])**2))/average_sensor_z)**2
             self.z_nulls_un[i] = ((np.sqrt(reading_un_z+uncetainty_in_vcc))*self.z_nulls[i])
 
         self.saving_values()

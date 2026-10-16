@@ -120,4 +120,12 @@ def split_data(port: str, filename: str, samples: int, number: int) -> pd.DataFr
                 z_data[z_data.columns[z+1]] = total_input_df[total_input_df.columns[i]]
                 z+=1
 
-    return x_data, y_data, z_data
+    shape_x = x_data.shape
+    shape_y = y_data.shape
+    shape_z = z_data.shape
+
+    x_sensors = shape_x[1]-1
+    y_sensors = shape_y[1]-1
+    z_sensors = shape_z[1]-1
+
+    return x_data, y_data, z_data, x_sensors, y_sensors, z_sensors

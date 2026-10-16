@@ -21,14 +21,14 @@ class Fields:
         samples (int): the number of samples for each measurement
 
     Methods:
+        data_split() -> None:
+            uses the `split_data` function to separate the incoming data being read from
+            the sensor array into x, y and z directional data frames
         define() -> None:
             defines all the nulls/sens/uncertainties/stds variables that will be imported
             and saved from other classes
         get_params() -> None:
             gets the values of the variables defined in the previous method
-        data_split() -> None:
-            uses the `split_data` function to separate the incoming data being read from
-            the sensor array into x, y and z directional data frames
         into_voltage() -> None:
             converts the incoming data into voltages by multiplying them by a scale factor
             and then subtracting the null voltage of each sensor from that sensors data. also
@@ -67,6 +67,7 @@ class Fields:
         self.x_sens = None
         self.y_sens = None
         self.z_sens = None
+
         self.x_sens_un = None
         self.y_sens_un = None
         self.z_sens_un = None
@@ -87,6 +88,24 @@ class Fields:
         self.y_field_un = None
         self.z_field_un = None
 
+        self.x_sensors = None
+        self.y_sensors = None
+        self.z_sensors = None
+
+        self.data_split()
+
+    def data_split(self) -> None:
+        '''
+        uses the `split_data` function to separate the incoming data being read from
+        the sensor array into x, y and z directional data frames
+        Args:
+            None
+        Returns:
+            None
+        '''
+
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
+
         self.define()
 
 
@@ -100,25 +119,25 @@ class Fields:
             None        
         '''
 
-        self.x_nulls = np.empty(int(self.number/3))
-        self.y_nulls = np.empty(int(self.number/3))
-        self.z_nulls = np.empty(int(self.number/3))
+        self.x_nulls = np.empty(self.x_sensors)
+        self.y_nulls = np.empty(self.y_sensors)
+        self.z_nulls = np.empty(self.z_sensors)
 
-        self.x_nulls_un = np.empty(int(self.number/3))
-        self.y_nulls_un = np.empty(int(self.number/3))
-        self.z_nulls_un = np.empty(int(self.number/3))
+        self.x_nulls_un = np.empty(self.x_sensors)
+        self.y_nulls_un = np.empty(self.y_sensors)
+        self.z_nulls_un = np.empty(self.z_sensors)
 
-        self.x_stds = np.empty(int(self.number/3))
-        self.y_stds = np.empty(int(self.number/3))
-        self.z_stds = np.empty(int(self.number/3))
+        self.x_stds = np.empty(self.x_sensors)
+        self.y_stds = np.empty(self.y_sensors)
+        self.z_stds = np.empty(self.z_sensors)
 
-        self.x_sens = np.empty(int(self.number/3))
-        self.y_sens = np.empty(int(self.number/3))
-        self.z_sens = np.empty(int(self.number/3))
+        self.x_sens = np.empty(self.x_sensors)
+        self.y_sens = np.empty(self.y_sensors)
+        self.z_sens = np.empty(self.z_sensors)
 
-        self.x_sens_un = np.empty(int(self.number/3))
-        self.y_sens_un = np.empty(int(self.number/3))
-        self.z_sens_un = np.empty(int(self.number/3))
+        self.x_sens_un = np.empty(self.x_sensors)
+        self.y_sens_un = np.empty(self.y_sensors)
+        self.z_sens_un = np.empty(self.z_sensors)
 
         self.get_params()
 
@@ -157,28 +176,17 @@ class Fields:
         y_sens_un_df = pd.read_csv(csv_folder_path / 'y_uns.csv', header = None)
         z_sens_un_df = pd.read_csv(csv_folder_path / 'z_uns.csv', header = None)
 
-        for i in range(int(self.number/3)):
+        for i in range(self.x_sensors):
             self.x_sens[i] = np.mean(x_sens_df[x_sens_df.columns[i]])
-            self.y_sens[i] = np.mean(y_sens_df[y_sens_df.columns[i]])
-            self.z_sens[i] = np.mean(z_sens_df[z_sens_df.columns[i]])
-
             self.x_sens_un[i] = np.mean(x_sens_un_df[x_sens_un_df.columns[i]])
+
+        for i in range(self.y_sensors):
+            self.y_sens[i] = np.mean(y_sens_df[y_sens_df.columns[i]])
             self.y_sens_un[i] = np.mean(y_sens_un_df[y_sens_un_df.columns[i]])
+
+        for i in range(self.z_sensors):
+            self.z_sens[i] = np.mean(z_sens_df[z_sens_df.columns[i]])
             self.z_sens_un[i] = np.mean(z_sens_un_df[z_sens_un_df.columns[i]])
-
-        self.data_split()
-
-    def data_split(self) -> None:
-        '''
-        uses the `split_data` function to separate the incoming data being read from
-        the sensor array into x, y and z directional data frames
-        Args:
-            None
-        Returns:
-            None
-        '''
-
-        self.x, self.y, self.z = split_data(self.port, self.filename, self.samples, self.number)
 
         self.into_voltage()
 
@@ -193,11 +201,11 @@ class Fields:
             None
         '''
 
-        self.x_voltage_un = np.empty(int(self.number/3))
-        self.y_voltage_un = np.empty(int(self.number/3))
-        self.z_voltage_un = np.empty(int(self.number/3))
+        self.x_voltage_un = np.empty(self.x_sensors)
+        self.y_voltage_un = np.empty(self.y_sensors)
+        self.z_voltage_un = np.empty(self.z_sensors)
 
-        for i in range(int(self.number/3)):
+        for i in range(self.x_sensors):
             self.x_sensor_uncertainty = np.sqrt((0.5**2)+self.x_stds[i])
             x_average_reading = np.mean(self.x[self.x.columns[i+1]])
 
@@ -212,7 +220,7 @@ class Fields:
 
             self.x_voltage_un[i] = np.sqrt((self.x_nulls_un[i]**2)+(x_uncertainty_in_voltage**2))
 
-        for i in range(int(self.number/3)):
+        for i in range(self.y_sensors):
             self.y_sensor_uncertainty = np.sqrt((0.5**2)+self.y_stds[i])
             y_average_reading = np.mean(self.y[self.y.columns[i+1]])
 
@@ -227,7 +235,7 @@ class Fields:
 
             self.y_voltage_un[i] = np.sqrt((self.y_nulls_un[i]**2)+(y_uncertainty_in_voltage**2))
 
-        for i in range(int(self.number/3)):
+        for i in range(self.z_sensors):
             self.z_sensor_uncertainty = np.sqrt((0.5**2)+self.z_stds[i])
             z_average_reading = np.mean(self.z[self.z.columns[i+1]])
 
@@ -255,11 +263,11 @@ class Fields:
             None
         '''
 
-        self.x_field_un = np.empty(int(self.number/3))
-        self.y_field_un = np.empty(int(self.number/3))
-        self.z_field_un = np.empty(int(self.number/3))
+        self.x_field_un = np.empty(self.x_sensors)
+        self.y_field_un = np.empty(self.y_sensors)
+        self.z_field_un = np.empty(self.z_sensors)
 
-        for i in range(int(self.number/3)):
+        for i in range(self.x_sensors):
             x_voltage_un = (np.mean(self.x_voltage_un[i]/self.x[self.x.columns[i+1]]))**2
 
             self.x[self.x.columns[i+1]] = self.x[self.x.columns[i+1]]/self.x_sens[i]
@@ -268,7 +276,7 @@ class Fields:
             x_sens_un = (self.x_sens_un[i]/np.mean(self.x_sens))**2
             self.x_field_un[i] = x_average_field*(np.sqrt((x_sens_un)+(x_voltage_un)))
 
-        for i in range(int(self.number/3)):
+        for i in range(self.y_sensors):
             y_voltage_un = (np.mean(self.y_voltage_un[i]/self.y[self.y.columns[i+1]]))**2
 
             self.y[self.y.columns[i+1]] = self.y[self.y.columns[i+1]]/self.y_sens[i]
@@ -277,7 +285,7 @@ class Fields:
             y_sens_un = (self.y_sens_un[i]/np.mean(self.y_sens))**2
             self.y_field_un[i] = y_average_field*(np.sqrt((y_sens_un)+(y_voltage_un)))
 
-        for i in range(int(self.number/3)):
+        for i in range(self.z_sensors):
             z_voltage_un = (np.mean(self.y_voltage_un[i]/self.y[self.y.columns[i+1]]))**2
 
             self.z[self.z.columns[i+1]] = self.z[self.z.columns[i+1]]/self.z_sens[i]
@@ -299,32 +307,40 @@ class Fields:
             None
         '''
 
-        new_cols = ['time/s']
-        new_cols.extend([f'field_strength_S{i}/mT' for i in range(1, (int(self.number/3)+1))])
+        x_new_cols = ['time/s']
+        x_new_cols.extend([f'field_strength_S{i}/mT' for i in range(1, self.x_sensors+1)])
 
-        self.x.columns = new_cols
-        self.y.columns = new_cols
-        self.z.columns = new_cols
+        y_new_cols = ['time/s']
+        y_new_cols.extend([f'field_strength_S{i}/mT' for i in range(1, self.y_sensors+1)])
+
+        z_new_cols = ['time/s']
+        z_new_cols.extend([f'field_strength_S{i}/mT' for i in range(1, self.z_sensors+1)])
+
+        self.x.columns = x_new_cols
+        self.y.columns = y_new_cols
+        self.z.columns = z_new_cols
 
         self.x[self.x.columns[0]] = (self.x[self.x.columns[0]].astype(float))/1000
         self.y[self.y.columns[0]] = (self.y[self.y.columns[0]].astype(float))/1000
         self.z[self.z.columns[0]] = (self.z[self.z.columns[0]].astype(float))/1000
 
-        x_relative_uncertainty = np.empty(int(self.number/3))
-        y_relative_uncertainty = np.empty(int(self.number/3))
-        z_relative_uncertainty = np.empty(int(self.number/3))
+        x_relative_uncertainty = np.empty(self.x_sensors)
+        y_relative_uncertainty = np.empty(self.y_sensors)
+        z_relative_uncertainty = np.empty(self.z_sensors)
 
-        for i in range(int(self.number/3)):
+        for i in range(self.x_sensors):
             x_column = self.x.columns[i+1]
-            y_column = self.y.columns[i+1]
-            z_column = self.z.columns[i+1]
-
             x_relative_uncertainty[i] = self.x_field_un[i]
-            y_relative_uncertainty[i] = self.y_field_un[i]
-            z_relative_uncertainty[i] = self.z_field_un[i]
-
             self.x[x_column] = self.x[x_column].apply(lambda x: f'{x:.3f} ± {abs(x*x_relative_uncertainty[i]):.3f}')
+
+        for i in range(self.y_sensors):
+            y_column = self.y.columns[i+1]
+            y_relative_uncertainty[i] = self.y_field_un[i]
             self.y[y_column] = self.y[y_column].apply(lambda x: f'{x:.3f} ± {abs(x*y_relative_uncertainty[i]):.3f}')
+
+        for i in  range(self.z_sensors):
+            z_column = self.z.columns[i+1]
+            z_relative_uncertainty[i] = self.z_field_un[i]
             self.z[z_column] = self.z[z_column].apply(lambda x: f'{x:.3f} ± {abs(x*z_relative_uncertainty[i]):.3f}')
 
         print(self.x)
