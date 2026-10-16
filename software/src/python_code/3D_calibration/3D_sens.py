@@ -1,3 +1,4 @@
+'''script that calculates the sensitivities of each sensor in the array'''
 from pathlib import Path
 from csv import writer
 import numpy as np
@@ -45,8 +46,8 @@ class Sensitivities:
             calibration field.        
     '''
 
-    def __init__(self, number: int, port: str, vcc: float, vcc_un: float, filename: str,
-                 resolution: int, samples: int, calibration_field: np.array, field_abs_un: float):
+    def __init__(self, number: int, port: str, vcc: float, vcc_un: float, filename: str, resolution: int,
+                samples: int, calibration_field: np.array, field_abs_un: float, inputs: bool = False):
         self.number = number
         self.port = port
         self.vcc = vcc
@@ -56,6 +57,7 @@ class Sensitivities:
         self.samples = samples
         self.calibration_field = calibration_field
         self.field_abs_uncertainty = field_abs_un
+        self.inputs = inputs
 
         self.sensor_uncertainty = 0.5
         self.uncertainty_in_vcc = (self.vcc_uncertainty/self.vcc)**2
@@ -115,17 +117,16 @@ class Sensitivities:
         self.y_stds = stds_df.iloc[1].to_numpy()
         self.z_stds = stds_df.iloc[2].to_numpy()
 
-        self.running()
+        self.get_params()
 
-
-    def current_comparison(self, current: float, current_abs_uncertainty: float,
+    def current_comparison(self, current: np.array, current_abs_uncertainty: float,
                            number_of_turns: int, coil_radius: float) -> None:
         '''
         takes inputs for the coil properties and calculates what the outputted
         magnetic field should be so that it can be compared to what is detected
         by the probe.
         Args:
-            current (float): input current into the calibration coils
+            current (np.array): input current into the calibration coils
             current_abs_uncertainty (float): uncertainty in the measurement of
                 the current into the coils
             number_of_turns (int): the number of turns in the calibration coils
@@ -133,6 +134,36 @@ class Sensitivities:
         Returns:
             None
         '''
+
+        x_expected_field = (0.8**1.5)*(4*np.pi*(10**(-7)))*(number_of_turns*current[0])/coil_radius
+        x_square = ((current_abs_uncertainty/current[0])**2)+((0.5*10**(-3)/coil_radius)**2)
+        x_field_uncertainty = np.sqrt(x_square)*x_expected_field
+        x_diff = (np.abs(x_expected_field-self.field[0]))/self.field[0]*100
+        print(f'expected field (x):{x_expected_field} ± {x_field_uncertainty}, actual field (x): {self.field[0]}')
+        print(f'% difference: {x_diff}')
+
+        y_expected_field = (0.8**1.5)*(4*np.pi*(10**(-7)))*(number_of_turns*current[1])/coil_radius
+        y_square = ((current_abs_uncertainty/current[1])**2)+((0.5*10**(-3)/coil_radius)**2)
+        y_field_uncertainty = np.sqrt(y_square)*y_expected_field
+        y_diff = (np.abs(y_expected_field-self.field[1]))/self.field[1]*100
+        print(f'expected field (y):{y_expected_field} ± {y_field_uncertainty}, actual field (y): {self.field[1]}')
+        print(f'% difference: {y_diff}')
+
+        z_expected_field = (0.8**1.5)*(4*np.pi*(10**(-7)))*(number_of_turns*current[2])/coil_radius
+        z_square = ((current_abs_uncertainty/current[2])**2)+((0.5*10**(-3)/coil_radius)**2)
+        z_field_uncertainty = np.sqrt(z_square)*z_expected_field
+        z_diff = (np.abs(z_expected_field-self.field[2]))/self.field[2]*100
+        print(f'expected field (z):{z_expected_field} ± {z_field_uncertainty}, actual field (z): {self.field[2]}')
+        print(f'% difference: {z_diff}')
+
+        if self.calibration_field[0] != 0:
+            self.perform_calibration_x()
+        if self.calibration_field[1] != 0:
+            self.perform_calibration_y()
+        if self.calibration_field[2] != 0:
+            self.perform_calibration_z()
+
+        self.saving_sens()
 
     def perform_calibration_x(self) -> None:
         '''
@@ -268,29 +299,10 @@ class Sensitivities:
             writer_obj = writer(f)
             writer_obj.writerow(self.z_sens_un)
 
-    def running(self) -> None:
-        '''
-        method for running the calibration methods for each direction.
-        decided which ones to run based on if any of the field values are 0.
-        runs the saving script afterwards.
-        Args:
-            None
-        Returns:
-            None
-        '''
-
-        self.get_params()
-
-        if self.calibration_field[0] != 0:
-            self.perform_calibration_x()
-        if self.calibration_field[1] != 0:
-            self.perform_calibration_y()
-        if self.calibration_field[2] != 0:
-            self.perform_calibration_z()
-
-        self.saving_sens()
 
 if __name__ == '__main__':
     x = Sensitivities(number = 6, port = '/dev/ttyUSB0', vcc = 5.0, vcc_un = 0.05,
                     filename = 'calibration_field_1.csv', resolution = 10,
                     samples = 400, calibration_field = [34,35,34], field_abs_un = 0.05)
+    x.current_comparison(current=[2,2,2], current_abs_uncertainty=0.05,
+                         number_of_turns=50, coil_radius=2)

@@ -1,3 +1,4 @@
+'''script that calculates the null voltages and noise of each sensor'''
 from pathlib import Path
 from csv import writer
 import numpy as np
@@ -7,9 +8,9 @@ from func import split_data
 
 class Nulls:
     '''
-    class to calculate the null voltage and the associated uncertainties of each sensor in the array. 
-    also calculates the standard deviations for each sensor. the data is split directionally by the 
-    imported function `split_data`.
+    class to calculate the null voltage and the associated uncertainties of each sensor in the
+    array. also calculates the standard deviations for each sensor. the data is split directionally 
+    by the imported function `split_data`.
 
     Attributes
         number (int): the number of sensors present in the array (total for all directions)
