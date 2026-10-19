@@ -1,5 +1,6 @@
 '''script that converts the data inputs to a magnetic field measurement'''
 from pathlib import Path
+import csv
 import pandas as pd
 import numpy as np
 from func import split_data
@@ -105,6 +106,9 @@ class Fields:
         '''
 
         self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
+
+        calib_path = Path(__file__).resolve().with_name('fake_data.csv')
+        self.data = pd.read_csv(calib_path)
 
         self.define()
 
@@ -328,6 +332,17 @@ class Fields:
         y_relative_uncertainty = np.empty(self.y_sensors)
         z_relative_uncertainty = np.empty(self.z_sensors)
 
+        file_dir = Path(__file__).parent/'csv'
+
+        x_path = file_dir / 'x_data.csv'
+        y_path = file_dir / 'y_data.csv'
+        z_path = file_dir / 'z_data.csv'
+
+        self.x.to_csv(x_path, index = False)
+        self.y.to_csv(y_path, index = False)
+        self.z.to_csv(z_path, index = False)
+
+
         for i in range(self.x_sensors):
             x_column = self.x.columns[i+1]
             x_relative_uncertainty[i] = self.x_field_un[i]
@@ -342,10 +357,6 @@ class Fields:
             z_column = self.z.columns[i+1]
             z_relative_uncertainty[i] = self.z_field_un[i]
             self.z[z_column] = self.z[z_column].apply(lambda x: f'{x:.3f} ± {abs(x*z_relative_uncertainty[i]):.3f}')
-
-        print(self.x)
-        print(self.y)
-        print(self.z)
 
 if __name__ == '__main__':
     x = Fields(number = 6, port = '/dev/ttyUSB0', filename = 'test_1.csv',

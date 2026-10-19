@@ -9,7 +9,7 @@ from pathlib import Path
 from csv import writer
 import numpy as np
 import pandas as pd
-from read import read_data
+from func import read_data
 
 class Nulls:
     '''

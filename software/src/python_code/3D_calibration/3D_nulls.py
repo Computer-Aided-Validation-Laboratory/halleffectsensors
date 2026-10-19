@@ -81,7 +81,7 @@ class Nulls:
         '''
 
         self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
-
+        print(self.x)
         self.find_nulls()
 
     def find_nulls(self) -> None:
@@ -189,5 +189,7 @@ class Nulls:
             writer_obj.writerow(self.z_stds)
 
 if __name__ == '__main__':
-    x = Nulls(number = 6, port = '/dev/ttyUSB0', vcc = 5.0, filename = 'nulls_data.csv',
+    x = Nulls(number = 9, port = '/dev/ttyUSB0', vcc = 5.0, filename = 'nulls_data.csv',
               vcc_un = 0.05, resolution = 10, samples = 400)
+
+# need to change split_data to work for x, y and z having different amounts of sensors

@@ -82,9 +82,9 @@ def split_data(port: str, filename: str, samples: int, number: int) -> pd.DataFr
     with open(output_json, encoding = 'utf-8') as f:
         sensor_data = json.load(f)
 
-    total_input_df = read_data(port, filename, samples)
-    data_path =  Path(__file__).resolve().with_name('example.csv')
-    #total_input_df = pd.read_csv(data_path)
+    #total_input_df = read_data(port, filename, samples)
+    data_path =  Path(__file__).resolve().with_name('fake_data.csv')
+    total_input_df = pd.read_csv(data_path)
     rows = total_input_df.shape[0]
 
     x_data = pd.DataFrame(np.zeros((rows, (int(number/3)+1))), dtype = float)
