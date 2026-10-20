@@ -96,6 +96,12 @@ class Conversion:
         std_df = pd.read_csv(std_path)
         self.stds = std_df.iloc[0]
 
+        print(self.sensitivities) #retruns nan nan nan nan nan...
+        print(self.stds) # think this is fine
+        print(self.nulls) # this is fine too
+        print(self.nulls_uncertainties) # so is this
+
+
 
     def into_voltage(self) -> None:
         '''
@@ -106,9 +112,13 @@ class Conversion:
             None
         Returns:
             None
-        ''' 
+        '''
 
-        self.data = read_data(self.port, self.filename, self.samples)
+        #self.data = read_data(self.port, self.filename, self.samples)
+
+        calib_path = Path(__file__).resolve().with_name('fake_data.csv')
+        self.data = pd.read_csv(calib_path)
+        print(self.data)
 
         self.voltage_uncertainty = [0] * self.number
 
@@ -127,7 +137,7 @@ class Conversion:
 
                 self.data[self.data.columns[i+1]] = self.data[self.data.columns[i+1]]-self.nulls[i]
 
-                self.voltage_uncertainty[i] = np.sqrt((self.nulls_uncertainties[i])**2 + (v1_uncertainty)**2)
+                self.voltage_uncertainty[i] = np.sqrt((self.nulls_uncertainties[i])**2+(v1_uncertainty)**2)
 
     def field_strengths(self) -> None:
         '''
@@ -146,7 +156,7 @@ class Conversion:
 
             voltage = (self.voltage_uncertainty[i]/self.data[self.data.columns[i+1]].mean())**2
 
-            self.data[self.data.columns[i+1]] = (self.data[self.data.columns[i+1]]/(self.sensitivities[i]/1000))*1000
+            self.data[self.data.columns[i+1]] = (self.data[self.data.columns[i+1]]/(self.sensitivities[i]/100))
 
             sensitivity = (self.sensitivities_uncertainties[i]/self.sensitivities.mean())**2
             self.field_uncertainty[i] = np.sqrt((sensitivity+voltage))
@@ -194,4 +204,3 @@ class Conversion:
         self.into_voltage()
         self.field_strengths()
         self.display_uncertainty()
-        

@@ -134,10 +134,10 @@ class Sensitivity:
         
         uncertainty_in_sensor = 0.5
 
-        calib_path = Path(__file__).resolve().with_name('fake_data.csv')
-        self.calibration_data = pd.read_csv(calib_path)
+        #calib_path = Path(__file__).resolve().with_name('fake_data.csv')
+        #self.calibration_data = pd.read_csv(calib_path)
         
-        #self.calibration_data = read_data(self.port, self.filename, self.samples)
+        self.calibration_data = read_data(self.port, self.filename, self.samples)
         uncertainty_sen_frame = self.calibration_data
         
         self.sensitivities = [0]*self.number
@@ -158,6 +158,7 @@ class Sensitivity:
         
             self.calibration_data[self.calibration_data.columns[x+1]] = self.calibration_data[self.calibration_data.columns[x+1]]*self.vcc / self.bits
             self.calibration_data[self.calibration_data.columns[x+1]] -= self.nulls[x]
+            self.calibration_data[self.calibration_data.columns[x+1]] = np.abs(self.calibration_data[self.calibration_data.columns[x+1]])
         
             third = ((uncertainty_in_volt_nulls)/(self.calibration_data[self.calibration_data.columns[x+1]].mean()))**2
             fourth = ((self.field_uncertainty)/self.field)**2
