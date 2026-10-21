@@ -90,6 +90,8 @@ class Sensitivities:
         self.y_sensors = None
         self.z_sensors = None
 
+        self.get_params()
+
     def get_params(self) -> None:
         '''
         imports values calculated in other scripts like the null voltages, the
@@ -101,7 +103,7 @@ class Sensitivities:
             None
         '''
 
-        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples)
 
         self.x_nulls = np.empty(self.x_sensors)
         self.y_nulls = np.empty(self.y_sensors)
@@ -140,7 +142,6 @@ class Sensitivities:
         self.y_stds = stds_df.iloc[1].to_numpy()
         self.z_stds = stds_df.iloc[2].to_numpy()
 
-        self.get_params()
 
     def current_comparison(self, current: np.array, current_abs_uncertainty: float,
                            number_of_turns: int, coil_radius: float) -> None:
@@ -198,12 +199,13 @@ class Sensitivities:
         Returns:
             None
         '''
+
         x_data_un = self.x.copy()
 
         for i in range(self.x_sensors):
             self.x[self.x.columns[i+1]] = self.x[self.x.columns[i+1]]*self.vcc/self.bits
             self.x[self.x.columns[i+1]] -= self.x_nulls[i]
-            self.x_sens[i] = np.mean((self.x[self.x.columns[i+1]]/self.calibration_field[0])*1000000)
+            self.x_sens[i] = np.mean((self.x[self.x.columns[i+1]]/self.calibration_field[0])*1000)
 
             average_count = np.mean(x_data_un[x_data_un.columns[i+1]])
             count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.x_stds[i])**2))/average_count)**2
@@ -233,7 +235,7 @@ class Sensitivities:
         for i in range(self.y_sensors):
             self.y[self.y.columns[i+1]] = self.y[self.y.columns[i+1]]*self.vcc/self.bits
             self.y[self.y.columns[i+1]] -= self.y_nulls[i]
-            self.y_sens[i] = np.mean((self.y[self.y.columns[i+1]]/self.calibration_field[1])*1000000)
+            self.y_sens[i] = np.mean((self.y[self.y.columns[i+1]]/self.calibration_field[1])*1000)
 
             average_count = np.mean(y_data_un[y_data_un.columns[i+1]])
             count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.y_stds[i])**2))/average_count)**2
@@ -263,7 +265,7 @@ class Sensitivities:
         for i in range(self.z_sensors):
             self.z[self.z.columns[i+1]] = self.z[self.z.columns[i+1]]*self.vcc/self.bits
             self.z[self.z.columns[i+1]] -= self.z_nulls[i]
-            self.z_sens[i] = np.mean((self.z[self.z.columns[i+1]]/self.calibration_field[2])*1000000)
+            self.z_sens[i] = np.mean((self.z[self.z.columns[i+1]]/self.calibration_field[2])*1000)
 
             average_count = np.mean(z_data_un[z_data_un.columns[i+1]])
             count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.z_stds[i])**2))/average_count)**2
@@ -326,6 +328,6 @@ class Sensitivities:
 if __name__ == '__main__':
     x = Sensitivities(number = 6, port = '/dev/ttyUSB0', vcc = 5.0, vcc_un = 0.05,
                     filename = 'calibration_field_1.csv', resolution = 10,
-                    samples = 400, calibration_field = [34,35,34], field_abs_un = 0.05)
+                    samples = 400, calibration_field = [46.9,47.5,45.2], field_abs_un = 0.05)
     x.current_comparison(current=[2,2,2], current_abs_uncertainty=0.05,
                          number_of_turns=50, coil_radius=2)

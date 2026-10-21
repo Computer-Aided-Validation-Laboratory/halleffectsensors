@@ -80,7 +80,7 @@ class Nulls:
             None
         '''
 
-        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples)
         print(self.x)
         self.find_nulls()
 

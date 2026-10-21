@@ -105,7 +105,7 @@ class Fields:
             None
         '''
 
-        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.number)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples)
 
         calib_path = Path(__file__).resolve().with_name('fake_data.csv')
         self.data = pd.read_csv(calib_path)
@@ -181,15 +181,15 @@ class Fields:
         z_sens_un_df = pd.read_csv(csv_folder_path / 'z_uns.csv', header = None)
 
         for i in range(self.x_sensors):
-            self.x_sens[i] = np.mean(x_sens_df[x_sens_df.columns[i]])
+            self.x_sens[i] = (np.mean(x_sens_df[x_sens_df.columns[i]]))
             self.x_sens_un[i] = np.mean(x_sens_un_df[x_sens_un_df.columns[i]])
 
         for i in range(self.y_sensors):
-            self.y_sens[i] = np.mean(y_sens_df[y_sens_df.columns[i]])
+            self.y_sens[i] = (np.mean(y_sens_df[y_sens_df.columns[i]]))
             self.y_sens_un[i] = np.mean(y_sens_un_df[y_sens_un_df.columns[i]])
 
         for i in range(self.z_sensors):
-            self.z_sens[i] = np.mean(z_sens_df[z_sens_df.columns[i]])
+            self.z_sens[i] = (np.mean(z_sens_df[z_sens_df.columns[i]]))
             self.z_sens_un[i] = np.mean(z_sens_un_df[z_sens_un_df.columns[i]])
 
         self.into_voltage()
@@ -272,9 +272,9 @@ class Fields:
         self.z_field_un = np.empty(self.z_sensors)
 
         for i in range(self.x_sensors):
-            x_voltage_un = (np.mean(self.x_voltage_un[i]/self.x[self.x.columns[i+1]]))**2
+            x_voltage_un = (self.x_voltage_un[i]/(np.mean(self.x[self.x.columns[i+1]])))**2
 
-            self.x[self.x.columns[i+1]] = self.x[self.x.columns[i+1]]/self.x_sens[i]
+            self.x[self.x.columns[i+1]] = (self.x[self.x.columns[i+1]]*1000)/self.x_sens[i]
 
             x_average_field = np.mean(self.x[self.x.columns[i+1]])
             x_sens_un = (self.x_sens_un[i]/np.mean(self.x_sens))**2
@@ -283,7 +283,7 @@ class Fields:
         for i in range(self.y_sensors):
             y_voltage_un = (np.mean(self.y_voltage_un[i]/self.y[self.y.columns[i+1]]))**2
 
-            self.y[self.y.columns[i+1]] = self.y[self.y.columns[i+1]]/self.y_sens[i]
+            self.y[self.y.columns[i+1]] = (self.y[self.y.columns[i+1]]*1000)/self.y_sens[i]
 
             y_average_field = np.mean(self.y[self.y.columns[i+1]])
             y_sens_un = (self.y_sens_un[i]/np.mean(self.y_sens))**2
@@ -292,11 +292,11 @@ class Fields:
         for i in range(self.z_sensors):
             z_voltage_un = (np.mean(self.y_voltage_un[i]/self.y[self.y.columns[i+1]]))**2
 
-            self.z[self.z.columns[i+1]] = self.z[self.z.columns[i+1]]/self.z_sens[i]
+            self.z[self.z.columns[i+1]] = (self.z[self.z.columns[i+1]]*1000)/self.z_sens[i]
 
             z_average_field = np.mean(self.z[self.z.columns[i+1]])
             z_sens_un = (self.z_sens_un[i]/np.mean(self.z_sens))**2
-            self.z_field_un[i] = z_average_field*(np.sqrt((z_voltage_un)+(z_sens_un)))
+            self.z_field_un[i] = z_average_field*np.sqrt((z_voltage_un)+(z_sens_un))
 
         self.house_keeping()
 
@@ -357,6 +357,10 @@ class Fields:
             z_column = self.z.columns[i+1]
             z_relative_uncertainty[i] = self.z_field_un[i]
             self.z[z_column] = self.z[z_column].apply(lambda x: f'{x:.3f} ± {abs(x*z_relative_uncertainty[i]):.3f}')
+
+        print(self.x)
+        print(self.y)
+        print(self.z)
 
 if __name__ == '__main__':
     x = Fields(number = 6, port = '/dev/ttyUSB0', filename = 'test_1.csv',
