@@ -23,3 +23,7 @@ __pycache__/
 
 # config files
 *.json
+
+# component design files
+*.FCStd
+
