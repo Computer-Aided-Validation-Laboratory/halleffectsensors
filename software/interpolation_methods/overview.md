@@ -1,0 +1,1 @@
+talk about interpolation methods here - if i manage to get good plots of the self.x, self.y. self.z data frames that I can put in that will be super helpful and can talk about the coordinates/config file issues here
