@@ -353,7 +353,7 @@ class Fields:
             y_relative_uncertainty[i] = self.y_field_un[i]
             self.y[y_column] = self.y[y_column].apply(lambda x: f'{x:.3f} ± {abs(x*y_relative_uncertainty[i]):.3f}')
 
-        for i in  range(self.z_sensors):
+        for i in range(self.z_sensors):
             z_column = self.z.columns[i+1]
             z_relative_uncertainty[i] = self.z_field_un[i]
             self.z[z_column] = self.z[z_column].apply(lambda x: f'{x:.3f} ± {abs(x*z_relative_uncertainty[i]):.3f}')
