@@ -54,5 +54,11 @@ plt.show()
 
 # this works well now, next steps (task for the morning is to make it so that it does one for every time? or like can give like one averaged one every 10 seconds and a new image flashes up?)
 # also should do like bigger ones when got my new ADC and can use the helmholtz coil to make maps for each calibration stage or like iteration. can add some of this to repo
-# should also start making my calibration README.md 
+# should also start making my calibration README.md
 # should put quick explaination of it in the actual README.md andthen put a link to the longer explaination for both 1D and 3D
+
+# do a map of the difference in field to what it is meant to be also
+
+
+
+# just to see if the push will work
