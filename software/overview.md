@@ -17,5 +17,33 @@ The python code is comprised of two parts: 1D calibration and 3D calibration. Th
 - once the array is placed into a field, that value is inputted to have the array to be calibrated against 
 
 ### 1D calibration
-Data is read from 
+Data is read from the Arduino and read into the python scripts. The null voltages can be calculated, then the sensitivities and then the sensor array is calibrated and the fields script can be used to measure field strengths across the array. 
+
 #### Key Classes and Methods
+
+##### Classes
+
+###### Nulls class:
+
+###### Calibrate class:
+
+###### Convert class:
+
+##### Methods
+
+### 3D Calibration
+
+#### Key Classes and Methods
+##### Classes
+Nulls Class:
+- 
+
+Calibrate Class:
+- 
+
+Convert Class:
+- 
+
+##### Methods
+- read_data()
+- split_data()
