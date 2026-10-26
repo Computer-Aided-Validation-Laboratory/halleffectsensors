@@ -4,7 +4,7 @@ This repo contains all information about the hall effect sensor array. The aim o
 
 This 'camera' is being designed for use in DIC experiments to visualise the magnetic fields over different areas of a test sample whilst it is undergoing deformation.
 
-This repo contains a hardware directory including things like circuit design, equipment lists, component designs, PCB plans and an overview of all the hardware (experimental side of the project). **paste link here**
+This repo contains a hardware directory including things like circuit design, equipment lists, component designs, PCB plans and an overview of all the hardware (experimental side of the project). [hardware overview](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/overview.md)
 
 There is also the software directory which contains all of the source code for the project (includes Arduino code and python code for calibration and data processing) and an interpolation methods directory. There is a detailed markdown file in this directory that outlines exactly how the software works: [software overview](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/software/overview.md)
 
