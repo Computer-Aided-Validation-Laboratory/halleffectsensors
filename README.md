@@ -19,7 +19,7 @@ software/
 ### Structure of `software/`
 ```
 software/
-|---- overview.md (linked above)          # overview of software directory
+|---- overview.md                         # overview of software directory (linked above)
 |---- src/
 |     |---- arduino_code/                 # for data reading
 |           |---- extended_code/
