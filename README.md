@@ -26,6 +26,9 @@ software/
 |                 |---- extended_code.ino # Arduino code for larger array (uses ADS115 library)
 |           |---- initial_code/
 |                 |---- initial_code.ino  # Arduino code for initial setup (less than 9 sensors)
+|     |---- jsons/
+|           |---- json_formatting.md      # details instructions for making custom jsons
+|           |---- indexes.md              # identifies which index corresponds to which electronic address
 |     |---- python_code/                  # for data processing/interpretation
 |           |---- 1D_array/
 |                 |---- fields.py         # does the data conversion
@@ -68,7 +71,7 @@ Every time the array is used in a new setup, it must be recalibrated. Once the a
 Then when the array is calibrated, it can be placed in an unknown field and it will produce measurements for that fiels in 1 or 3 directions.
 
 The idea of this project is that it can be used for any sample in any field setup, however in order for the calibration and visualisation methods to work, they must know the details about the setup being used. For using 3D calibration on an extended array (more than 8 sensors), a .json file must be used to specify the required information about each sensor in the array. This information is:     
-- `"index"` : this will be an integer (not in " "), corresponding to the electronic address of the sensor (this information will be on the PCB). This document: [indexes](link) details the corresponding index for each electronic address.   
+- `"index"` : this will be an integer (not in " "), corresponding to the electronic address of the sensor (this information will be on the PCB). This document: [indexes](link) details the corresponding index for each electronic address as well.   
 - `"coordinate"` : For each PCB board, the 'coordinate' of each sensor will link to an index/electronic address. The software needs to know these so that it knows where (physically) the sensor is, so it knows where the field measurements are coming from in order to visualise the field.     
 - `"direction"` : this entry will simply be "x", "y" or "z" depending on what component of the field that sensor is using. This can be determined if unsure by using the axis/direction on the calibration magnetic field probe. The sensors read fields coming towards the flat face of the sensor.
 
