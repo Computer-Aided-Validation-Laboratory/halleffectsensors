@@ -21,9 +21,6 @@ __pycache__/
 *.csv
 *.xlsx
 
-# config files
-*.json
-
 # component design files
 *.FCStd
 *.FCBak
