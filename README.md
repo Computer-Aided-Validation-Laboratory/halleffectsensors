@@ -77,4 +77,4 @@ The idea of this project is that it can be used for any sample in any field setu
 
 If the .json for the setup being used already exists, it can be used as normal. The parameter `json (str)` needs to be the name of the .json file detailing the information about the sensor array. E.g if the .json is called 'square.json', in every python script/class/method with an input for `json (str)`, the input parameter must be `square.json`.
 
-For the **formatting** of the .json file, it must be done in a particular way for the code to recognise it the way it is designed to. For information about how to format it/examples, see this document: [json formatting](link)
+For the **formatting** of the .json file, it must be done in a particular way for the code to recognise it the way it is designed to. For information about how to format it/examples, see this document: [json formatting](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/software/src/jsons/json_formatting.md)
