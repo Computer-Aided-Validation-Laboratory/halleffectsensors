@@ -55,7 +55,7 @@ def read_data(port: str, filename: str, samples: int = 400) -> None:
     df = pd.read_csv(csv_file, skipinitialspace=True)
     return df
 
-def split_data(port: str, filename: str, samples: int) -> pd.DataFrame:
+def split_data(port: str, filename: str, samples: int, input_json: json) -> pd.DataFrame:
     '''
     method that imports a json file containing the information about each sensor. uses
     this information to sort through the columns of the incoming data and separate it
@@ -66,6 +66,7 @@ def split_data(port: str, filename: str, samples: int) -> pd.DataFrame:
         filename (str): the name of the csv file that the data that is read in is
             stored in
         samples (int): the number of samples taken
+        input_json (json): contains all the input information of the sensor array being used
     Returns:
         x_data (pd.DataFrame): the data frame containing all the data coming in from
             sensors facing in the 'x' direction
@@ -79,12 +80,12 @@ def split_data(port: str, filename: str, samples: int) -> pd.DataFrame:
     '''
 
     path_json = Path(__file__).parent
-    output_json = path_json/'json.json'
+    output_json = path_json/input_json
 
     with open(output_json, encoding = 'utf-8') as f:
         sensor_data = json.load(f)
 
-    print(sensor_data)
+    # print(sensor_data)
 
     # total_input_df = read_data(port, filename, samples)
     data_path =  Path(__file__).resolve().with_name('fake_data.csv')
@@ -104,9 +105,6 @@ def split_data(port: str, filename: str, samples: int) -> pd.DataFrame:
             num_z +=1
         else:
             print("direction error, check .json")
-
-    print(num_x)
-    print(total_input_df)
 
     x_data = pd.DataFrame(np.zeros((rows, (num_x+1))), dtype = float)
     x_data[x_data.columns[0]] = total_input_df[total_input_df.columns[0]]

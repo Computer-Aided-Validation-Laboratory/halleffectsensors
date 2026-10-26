@@ -19,6 +19,7 @@ class Nulls:
         filename (str): filename that the recorded data is stored under
         vcc_un (float): the uncertainty in the measurement of vcc
         resolution (int): the resolution of the ADC that is used
+        json (str): config file containting required information about sensor array
         samples (int): the number of samples taken in each measurement
 
     Methods:
@@ -35,7 +36,7 @@ class Nulls:
     '''
 
     def __init__(self, number: int, port: str, vcc: float, filename: str,
-                 vcc_un: float, resolution: int, samples: int = 400):
+                 vcc_un: float, resolution: int, json: str, samples: int = 400):
         self.number = number
         self.port = port
         self.vcc = vcc
@@ -43,6 +44,7 @@ class Nulls:
         self.vcc_uncertainty = vcc_un
         self.bits = (2**resolution)-1
         self.samples = samples
+        self.json = json
 
         self.x = None
         self.y = None
@@ -80,7 +82,7 @@ class Nulls:
             None
         '''
 
-        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.json)
         print(self.x)
         self.find_nulls()
 
@@ -190,6 +192,4 @@ class Nulls:
 
 if __name__ == '__main__':
     x = Nulls(number = 9, port = '/dev/ttyUSB0', vcc = 5.0, filename = 'nulls_data.csv',
-              vcc_un = 0.05, resolution = 10, samples = 400)
-
-# need to change split_data to work for x, y and z having different amounts of sensors
+              vcc_un = 0.05, resolution = 10, json = 'json.json', samples = 400)

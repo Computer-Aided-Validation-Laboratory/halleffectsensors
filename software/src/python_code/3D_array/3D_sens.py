@@ -20,11 +20,14 @@ class Sensitivities:
         vcc_un (float): the uncertainty in the vcc measurement
         filename (str): the filename the calibration data is stored under
         resolution (int): the resolution of the ADC used in the circuit
+        json (str): config file used that contains the correct information about the array
         samples (int): the number of samples collected in each measurement
         calibration_field (np.array): the field that the sensors are calibrated
             against
         field_abs_un (float): the uncertainty in the measurement of the value of the
             calibration field
+        inputs (bool): decides whether or not to run the current comparison method or
+            not (default = False)
 
     Methods:
         get_params() -> None: 
@@ -46,8 +49,9 @@ class Sensitivities:
             calibration field.        
     '''
 
-    def __init__(self, number: int, port: str, vcc: float, vcc_un: float, filename: str, resolution: int,
-                samples: int, calibration_field: np.array, field_abs_un: float, inputs: bool = False):
+    def __init__(self, number: int, port: str, vcc: float, vcc_un: float, filename: str,
+                resolution: int, samples: int, calibration_field: np.array,
+                field_abs_un: float, json: str, inputs: bool = False):
         self.number = number
         self.port = port
         self.vcc = vcc
@@ -58,6 +62,7 @@ class Sensitivities:
         self.calibration_field = calibration_field
         self.field_abs_uncertainty = field_abs_un
         self.inputs = inputs
+        self.json = json
 
         self.sensor_uncertainty = 0.5
         self.uncertainty_in_vcc = (self.vcc_uncertainty/self.vcc)**2
@@ -103,7 +108,7 @@ class Sensitivities:
             None
         '''
 
-        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.json)
 
         self.x_nulls = np.empty(self.x_sensors)
         self.y_nulls = np.empty(self.y_sensors)
@@ -326,8 +331,9 @@ class Sensitivities:
 
 
 if __name__ == '__main__':
-    x = Sensitivities(number = 6, port = '/dev/ttyUSB0', vcc = 5.0, vcc_un = 0.05,
+    x = Sensitivities(number = 9, port = '/dev/ttyUSB0', vcc = 5.0, vcc_un = 0.05,
                     filename = 'calibration_field_1.csv', resolution = 10,
-                    samples = 400, calibration_field = [46.9,47.5,45.2], field_abs_un = 0.05)
+                    samples = 400, calibration_field = [46.9,47.5,45.2], field_abs_un = 0.05,
+                    json = 'json.json', inputs = False)
     x.current_comparison(current=[2,2,2], current_abs_uncertainty=0.05,
                          number_of_turns=50, coil_radius=2)

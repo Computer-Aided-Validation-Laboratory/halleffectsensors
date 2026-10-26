@@ -15,7 +15,7 @@ def read_data(port: str, filename: str, samples: int = 200) -> pd.DataFrame:
         filename (str): filename that the data is saved under (csv)
         samples (int): how many samples (timestamps) are read
     Retuns:
-        df (pd.DataFrame): the dataframe that the arduino data is stored in
+        df (pd.DataFrame): the data frame that the arduino data is stored in
     '''
 
     ser = serial.Serial(port, 9600)

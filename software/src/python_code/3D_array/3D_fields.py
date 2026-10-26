@@ -20,6 +20,7 @@ class Fields:
         vcc_un (float): the uncertainty in the measurement of vcc of the power source
         resolution (int): the resolution (bit-depth) of the ADC used in the array
         samples (int): the number of samples for each measurement
+        json (str): config file storing information about sensor array
 
     Methods:
         data_split() -> None:
@@ -44,7 +45,7 @@ class Fields:
             measurement next to the field result
     '''
     def __init__(self, number: int, port: str, filename: str, vcc: float,
-                 vcc_un: float, resolution: int, samples: int = 400):
+                 vcc_un: float, resolution: int, json: str, samples: int = 400):
         self.number = number
         self.port = port
         self.filename = filename
@@ -52,6 +53,7 @@ class Fields:
         self.vcc_uncertainty = vcc_un
         self.bits = (2**resolution)-1
         self.samples = samples
+        self.json = json
 
         self.x_nulls = None
         self.y_nulls = None
@@ -105,7 +107,7 @@ class Fields:
             None
         '''
 
-        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples)
+        self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.json)
 
         calib_path = Path(__file__).resolve().with_name('fake_data.csv')
         self.data = pd.read_csv(calib_path)
@@ -187,6 +189,8 @@ class Fields:
         for i in range(self.y_sensors):
             self.y_sens[i] = (np.mean(y_sens_df[y_sens_df.columns[i]]))
             self.y_sens_un[i] = np.mean(y_sens_un_df[y_sens_un_df.columns[i]])
+
+        print(self.y_sens)
 
         for i in range(self.z_sensors):
             self.z_sens[i] = (np.mean(z_sens_df[z_sens_df.columns[i]]))
@@ -363,5 +367,5 @@ class Fields:
         print(self.z)
 
 if __name__ == '__main__':
-    x = Fields(number = 6, port = '/dev/ttyUSB0', filename = 'test_1.csv',
-               vcc = 5.0, vcc_un = 0.05, resolution = 10, samples = 400)
+    x = Fields(number = 6, port = '/dev/ttyUSB0', filename = 'test_1.csv', vcc = 5.0,
+               vcc_un = 0.05, resolution = 10, json = 'json.json', samples = 400)
