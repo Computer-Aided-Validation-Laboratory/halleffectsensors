@@ -19,7 +19,8 @@ software/
 ### Structure of `software/`
 ```
 software/
-|---- overview.md                         # overview of software directory (linked above)
+|---- overview.md                        # overview of software directory (linked above)
+|---- uncertainty_quantification.md      # details uncertainty calculations through the code
 |---- src/
 |     |---- arduino_code/                 # for data reading
 |           |---- extended_code/
