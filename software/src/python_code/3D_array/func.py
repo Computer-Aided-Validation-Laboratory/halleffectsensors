@@ -79,7 +79,7 @@ def split_data(port: str, filename: str, samples: int, input_json: json) -> pd.D
         num_z (int): the number of sensors in the array facing the 'z' direction
     '''
 
-    path_json = Path(__file__).parent
+    path_json = Path(__file__).parent.parent.parent /'jsons'
     output_json = path_json/input_json
 
     with open(output_json, encoding = 'utf-8') as f:

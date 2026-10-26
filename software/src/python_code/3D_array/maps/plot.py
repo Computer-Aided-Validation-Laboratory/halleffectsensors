@@ -16,8 +16,8 @@ data_path = Path(__file__).parent / 'csv'
 data_path = Path(__file__).parent / 'map_data.csv'
 data = pd.read_csv(data_path)
 
-path_json = Path(__file__).parent
-json_output = path_json / 'plot.json'
+path_json = Path(__file__).parent.parent.parent
+json_output = path_json / 'jsons' /'plot.json'
 
 with open(json_output, encoding = 'utf-8') as f:
     sensors = json.load(f)
