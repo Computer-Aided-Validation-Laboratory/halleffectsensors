@@ -2,7 +2,7 @@
 
 This repo contains all information about the hall effect sensor array. The aim of this project is to create a 'magnetic field camera' made up of hall effect sensors. This repo contains information on constructing the array, calibrating the array and using it to measure live magnetic fields.
 
-The sensors use the hall effect to quantify magnetic fields. They output an integer that is proportional to a voltage produced across the hall element in the sensor. This voltage is proportional to the field that it is in. The voltage is calculated by converting the raw output: **Voltage = sensor count * vcc (total voltage range) / resolution**, and then the fields are found from: **Voltage = sensitivity * field strength**, where the sensitivity is found during the calibration steps. 
+The sensors use the hall effect to quantify magnetic fields. They output an integer that is proportional to a voltage produced across the hall element in the sensor. This voltage is proportional to the field that it is in. For more information about the background of the project, see this document: [project background](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/project_background.md)
 
 This 'camera' is being designed for use in DIC experiments to visualise the magnetic fields over different areas of a test sample whilst it is undergoing deformation.
 
