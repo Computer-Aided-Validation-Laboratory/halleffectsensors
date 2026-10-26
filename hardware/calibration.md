@@ -22,4 +22,4 @@ Once this is complete, the sensor array will be calibrated, the csvs generated w
 2. take as many samples as possible in each field (including for no fields) to get accurate results
 3. do multiple calibration field strengths
 4. try and calibrate in the same position as the array will be in for the experiment if possible
-5. check that results are what is expected (low uncertainties, null voltages of approx. half the vcc, sensitvities of about 3.125 mV/Gauss
+5. check that results are what is expected (low uncertainties, null voltages of approx. half the vcc, sensitvities of about 3.125 mV/Gauss etc)
