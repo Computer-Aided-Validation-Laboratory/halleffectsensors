@@ -149,7 +149,8 @@ Methods:
 * `house_keeping() -> None`: customises the output data frames to make them easier to read, changes the column titles and converts the time into s from ms. displays the uncertainty in each measurement next to the field result
 
 ##### Methods
-1. `read_data(port: str, filename: str, samples: int = 400)-> None`: method for reading data from the sensor array from the Arduino. uses the serial library to read in the data, opens a csv and stores the data in that csv.   
+1. `read_data(port: str, filename: str, samples: int = 400)-> None`: method for reading data from the sensor array from the Arduino. uses the serial library to read in the data, opens a csv and stores the data in that csv.
+ 
 Args:  
 * `port (str)`: the computer port that the sensor array is connected to
 * `filename (str)`: the name of the file that the data is stored under
@@ -157,10 +158,11 @@ Args:
 Returns: None
 
 2. `split_data(port: str, filename: str, samples: int) -> pd.DataFrame`: method that imports a json file containing the information about each sensor. uses this information to sort through the columns of the incoming data and separate it depending on the direction the sensor faced (found in the .json). Runs the method above (`read_data`) so that when this method is called both will run
+
 Args:
 * `port (str)`: the computer port that the sensor array is connected to
 * `filename (str)`: the name of the csv file that the data that is read in is stored in
-* `samples (int)`: the number of samples taken
+* `samples (int)`: the number of samples taken      
 Returns:
 * `x_data (pd.DataFrame)`: the data frame containing all the data coming in from sensors facing in the 'x' direction
 * `y_data (pd.DataFrame)`:the data frame containing all the data coming in from sensors facing in the 'y' direction
@@ -168,3 +170,10 @@ Returns:
 * `num_x (int)`: the number of sensors in the array facing the 'x' direction
 * `num_y (int)`: the number of sensors in the array facing the 'y' direction
 * `num_z (int)`: the number of sensors in the array facing the 'z' direction
+
+#### Output:
+The output of a 3D calibration test will be three data frames, in the order of x, y and z data. They will look like this (below) with the field measured at each sensor and the uncertainty in each measurement:
+
+<img width="792" height="360" alt="image" src="https://github.com/user-attachments/assets/64c28932-e36d-4919-b8fe-8872556e8ff4" />   
+
+
