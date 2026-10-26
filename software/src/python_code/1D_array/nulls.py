@@ -115,3 +115,7 @@ class Nulls:
 
         self.null_frame.to_csv(output_file_nulls, index = False)
         self.std_frame.to_csv(output_file_stds, index = False)
+
+if __name__ == "__main__":
+    x = Nulls(number = 6 ,port = '/dev/ttyUSB0', vcc = 5.0,
+          filename = 'calibration.csv', vcc_un = 0.05, bits = 10, samples = 400)

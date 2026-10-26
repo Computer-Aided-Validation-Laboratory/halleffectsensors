@@ -1,0 +1,28 @@
+{
+    "sensors": [
+       {
+        "index": 1,
+        "position": [0,0]
+       },
+       {
+        "index": 2,
+        "position": [1,0]
+       },
+       {
+        "index": 3,
+        "position": [0,1]
+       },
+       {
+        "index": 4,
+        "position": [1,1]
+       },
+       {
+        "index": 5,
+        "position": [1,2]
+       },
+       {
+        "index": 6,
+        "position": [0,2]
+       }
+    ]
+}

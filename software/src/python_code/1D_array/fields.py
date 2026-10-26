@@ -204,3 +204,7 @@ class Conversion:
         self.into_voltage()
         self.field_strengths()
         self.display_uncertainty()
+
+if __name__ == "__main__":
+    x = Conversion(port = 'fake_data.csv', filename = 'data.csv', number = 6,
+               vcc = 5, vcc_un = 0.05, bits = 10, samples = 200)

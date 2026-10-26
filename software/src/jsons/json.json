@@ -1,0 +1,59 @@
+{
+    "sensors": [
+        {
+            "index":1,
+            "ADDR": "A0",
+            "coordinate": "0x1",
+            "direction": "x"
+        },
+        {
+            "index":2,
+            "ADDR": "A1",
+            "coordinate": "0x1",
+            "direction": "y"
+        },
+        {
+            "index": 3,
+            "ADDR": "A2",
+            "coordinate": "0x1",
+            "direction": "z"
+        },
+        {
+            "index": 4,
+            "ADDR": "A3",
+            "coordinate": "1x0",
+            "direction": "x"
+        },
+        {
+            "index": 5,
+            "ADDR": "A4",
+            "coordinate": "1x0",
+            "direction": "y"
+        },
+        {
+            "index": 6,
+            "ADDR": "A5",
+            "coordinate": "1x0",
+            "direction": "z"
+        },
+        {
+            "index": 7,
+            "ADDR": "A6",
+            "coordinate": "0x2",
+            "direction": "x"
+        },
+        {
+            "index": 8,
+            "ADDR": "A7",
+            "coordinate":"2x0",
+            "direction": "y"
+        },
+        {
+            "index": 9,
+            "ADDR": "A8",
+            "coordinate": "0x2",
+            "direction": "z"
+        }
+    ]
+
+}
