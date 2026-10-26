@@ -53,3 +53,6 @@ hardware/
 |---- component_design/
 |     |---- CAD_designs.md           # designs for PCB holder/sensor support structure
 ```
+
+## Instructions for use:
+The idea of this project is that it can be used for any sample in any field setup, however in order for the calibration and visualisation methods to work, they must know the details about the setup being used. For using 3D calibration on an extended array (more than 8 sensors), a .json file must be used to 
