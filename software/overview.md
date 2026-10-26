@@ -1,6 +1,6 @@
 # Software overview
 
-The software portion of this project comprises of an Arduino, a python code and interpolation software for field visualisations. The Arduino code is responsible for telling the Arduino what format and order it should read the data from the hall effect sensors from. The python code is for interpreting this data, calibrating the sensors and converting the incoming data into field and uncertainty measurements. The interpolation software is for visualising the field measurements.
+The software portion of this project comprises of an Arduino, a python code and interpolation software for field visualisations. The Arduino code is responsible for telling the Arduino what format and order it should read the data from the hall effect sensors from. The python code is for interpreting this data, calibrating the sensors and converting the incoming data into field and uncertainty measurements. The interpolation software is for visualising the field measurements. There is a directory called 'jsons' which contains information about how to format a .json file for this project and also some examples.
 
 ## Arduino code
 
@@ -180,5 +180,3 @@ Returns:
 The output of a 3D calibration test will be three data frames, in the order of x, y and z data. They will look like this (below) with the field measured at each sensor and the uncertainty in each measurement:
 
 <img width="792" height="360" alt="image" src="https://github.com/user-attachments/assets/64c28932-e36d-4919-b8fe-8872556e8ff4" />   
-
-
