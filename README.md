@@ -55,4 +55,23 @@ hardware/
 ```
 
 ## Instructions for use:
-The idea of this project is that it can be used for any sample in any field setup, however in order for the calibration and visualisation methods to work, they must know the details about the setup being used. For using 3D calibration on an extended array (more than 8 sensors), a .json file must be used to 
+clone the repository and install:
+```
+git clone <repository-url>
+cd software
+pip install .
+```
+**need to actually make this a package (not done yet)**
+
+Every time the array is used in a new setup, it must be recalibrated. Once the array is setup and the sensors are in place, plug the Arduino into the computer. The Arduino sketch will need to be uploaded to the Arduino, this is done by opening the sketch in the Arduino IDE and uploading it. The first step is to find the null voltages/stds/uncertanties in each sensor with no field present. Then the array can be calibrated against calibration fields. Place the sensor array in the measured stable field and input the x, y and z values (if doing 1D then just put the direction that is being measured by the sensors) of the field into the `calibration_field` parameter and run the script. This can be repeated for multiple fields, just change the field value(s) to whatever they are measured as.
+
+Then when the array is calibrated, it can be placed in an unknown field and it will produce measurements for that fiels in 1 or 3 directions.
+
+The idea of this project is that it can be used for any sample in any field setup, however in order for the calibration and visualisation methods to work, they must know the details about the setup being used. For using 3D calibration on an extended array (more than 8 sensors), a .json file must be used to specify the required information about each sensor in the array. This information is:     
+- `"index"` : this will be an integer (not in " "), corresponding to the electronic address of the sensor (this information will be on the PCB). This document: [indexes](link) details the corresponding index for each electronic address.   
+- `"coordinate"` : For each PCB board, the 'coordinate' of each sensor will link to an index/electronic address. The software needs to know these so that it knows where (physically) the sensor is, so it knows where the field measurements are coming from in order to visualise the field.     
+- `"direction"` : this entry will simply be "x", "y" or "z" depending on what component of the field that sensor is using. This can be determined if unsure by using the axis/direction on the calibration magnetic field probe. The sensors read fields coming towards the flat face of the sensor.
+
+If the .json for the setup being used already exists, it can be used as normal. The parameter `json (str)` needs to be the name of the .json file detailing the information about the sensor array. E.g if the .json is called 'square.json', in every python script/class/method with an input for `json (str)`, the input parameter must be `square.json`.
+
+For the **formatting** of the .json file, it must be done in a particular way for the code to recognise it the way it is designed to. For information about how to format it/examples, see this document: [json formatting](link)
