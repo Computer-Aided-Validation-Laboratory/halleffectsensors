@@ -8,12 +8,12 @@ The Arduino code is fairly simple. It is important that the order in which the A
 
 ## Python code
 
-The python code is comprised of two parts: 1D calibration and 3D calibration. The difference between these two is just that for the 3D calibration, the x, y, z data must be processed separately as they will be subjected to different fields. For the calibration, they must be separate as they will compared against different field values. Apart from that, the two methods work similarly:
+The python code is comprised of two parts: 1D array and 3D array. The difference between these two is just that for the 3D array, the x, y, z data must be processed separately as they will be subjected to different fields. For the calibration, they must be separate as they will compared against different field values. Apart from that, the two methods work similarly:
 - data is read from the Arduino using the serial library
 - the null voltages, standard deviations (noise) and uncertainties in null voltages are calculated when the array is under no magnetic field
 - once the array is placed into a field, that value is inputted to have the array to be calibrated against 
 
-### 1D calibration
+### 1D array
 Data is read from the Arduino and read into the python scripts. The null voltages can be calculated, then the sensitivities and then the sensor array is calibrated and the fields script can be used to measure field strengths across the array. 
 
 #### Key Classes and Methods
@@ -99,6 +99,7 @@ Attributes:
 * `filename (str)`: filename that the recorded data is stored under
 * `vcc_un (float)`: the uncertainty in the measurement of vcc
 * `resolution (int)`: the resolution of the ADC that is used
+* `json (str)`: the config file used containing the relevant information for the sensor array being used
 * `samples (int)`: the number of samples taken in each measurement
 
 Methods: 
@@ -117,9 +118,11 @@ Attributes:
 * `vcc_un (float)`: the uncertainty in the vcc measurement
 * `filename (str)`: the filename the calibration data is stored under
 * `resolution (int)`: the resolution of the ADC used in the circuit
+* `json (str)`: the config file used containing the relevant information for the sensor array being used
 * `samples (int)`: the number of samples collected in each measurement
 * `calibration_field (np.array)`: the field that the sensors are calibrated against
 * `field_abs_un (float)`: the uncertainty in the measurement of the value of the calibration field
+* `inputs (bool)`: decides whether or not to run the current comparison method or not (default = False)
 
 Methods:
 * `get_params() -> None`: imports values calculated in other scripts like the null voltages, the noise of each sensor (std) and the uncertainties in each measurement and saves them as arrays to be used in this class
@@ -138,6 +141,7 @@ Attributes:
 * `vcc (float)`: the vcc of the power source powering the sensor
 * `vcc_un (float)`: the uncertainty in the measurement of vcc of the power source
 * `resolution (int)`: the resolution (bit-depth) of the ADC used in the array
+* `json (str)`: the config file used containing the relevant information for the sensor array being used
 * `samples (int)`: the number of samples for each measurement
 
 Methods:
@@ -162,7 +166,8 @@ Returns: None
 Args:
 * `port (str)`: the computer port that the sensor array is connected to
 * `filename (str)`: the name of the csv file that the data that is read in is stored in
-* `samples (int)`: the number of samples taken      
+* `samples (int)`: the number of samples taken
+* `json (str)`: the config file containing required information about the sensor array being used
 Returns:
 * `x_data (pd.DataFrame)`: the data frame containing all the data coming in from sensors facing in the 'x' direction
 * `y_data (pd.DataFrame)`:the data frame containing all the data coming in from sensors facing in the 'y' direction
