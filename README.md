@@ -2,9 +2,11 @@
 
 This repo contains all information about the hall effect sensor array. The aim of this project is to create a 'magnetic field camera' made up of hall effect sensors. This repo contains information on constructing the array, calibrating the array and using it to measure live magnetic fields.
 
+The sensors use the hall effect to quantify magnetic fields. They output an integer that is proportional to a voltage produced across the hall element in the sensor. This voltage is proportional to the field that it is in. The voltage is calculated by converting the raw output: **Voltage = sensor count * vcc (total voltage range) / resolution**, and then the fields are found from: **Voltage = sensitivity * field strength**, where the sensitivity is found during the calibration steps. 
+
 This 'camera' is being designed for use in DIC experiments to visualise the magnetic fields over different areas of a test sample whilst it is undergoing deformation.
 
-This repo contains a hardware directory including things like circuit design, equipment lists, component designs, PCB plans and an overview of all the hardware (experimental side of the project). [hardware overview](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/overview.md)
+This repo contains a hardware directory including things like [circuit design](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/circuit_design/experimental_setup_circuit.md), [equipment lists](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/equipment.md), component designs, PCB plans, [calibration instructions](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/calibration_tests.md) and an overview of all the hardware (experimental side of the project). [hardware overview](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/overview.md)
 
 There is also the software directory which contains all of the source code for the project (includes Arduino code and python code for calibration and data processing) and an interpolation methods directory. There is a detailed markdown file in this directory that outlines exactly how the software works: [software overview](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/software/overview.md)
 
