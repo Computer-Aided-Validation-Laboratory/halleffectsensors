@@ -41,7 +41,7 @@ Everything above was ordered for the initial setup, the circuit is being improve
 * 30 x male to female breadboard jumper [wires](https://docs.rs-online.com/285e/0900766b812bf0ed.pdf)
 * 40 x female to female breadboard jumper [wires](https://docs.rs-online.com/db94/0900766b812bf0ee.pdf)
 * 60 x male to male breadboard jumper [wires](https://docs.rs-online.com/b685/0900766b812bf0f0.pdf)
-* 5 x grove [cables] (https://docs.rs-online.com/5ba8/A700000006828213.pdf)
+* 5 x grove [cables](https://docs.rs-online.com/5ba8/A700000006828213.pdf)
 * 10 x grove to male jumper [cables](https://docs.rs-online.com/68c4/A700000006828209.pdf)
 * 10 x grove to female jumper [cables](https://docs.rs-online.com/a5d7/A700000006828221.pdf)
 
