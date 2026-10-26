@@ -19,10 +19,37 @@ software/
 ### Structure of `software/`
 ```
 software/
+|---- overview.md (linked above)          # overview of software directory
 |---- src/
-|     |---- arduino_code/
-|     |---- python_code/
-|---- interpolation_methods/
+|     |---- arduino_code/                 # for data reading
+|           |---- extended_code/
+|                 |---- extended_code.ino # Arduino code for larger array (uses ADS115 library)
+|           |---- initial_code/
+|                 |---- initial_code.ino  # Arduino code for initial setup (less than 9 sensors)
+|     |---- python_code/                  # for data processing/interpretation
+|           |---- 1D_array/
+|                 |---- fields.py         # does the data conversion
+|                 |---- nulls.py          # calculates the nulls
+|                 |---- read.py           # reads in the data from sensor
+|                 |---- sens.py           # calculates the sensitivity
+|           |---- 3D_array/
+|                 |---- 3D_fields.py      # does data conversion for 3D array
+|                 |---- 3D_nulls.py       # calculates the nulls for 3D array
+|                 |---- 3D_sens.py        # calculates the sensitivities for 3D array
+|                 |---- func.py           # reads data from Arduino and splits based on direction
+|---- interpolation_methods/              # for data visualisation
 
 ```
-going to leave this for now because it will end up changing a bunch and i don't want to waste time on it.
+### Structure of `hardware/`
+```
+hardware/
+|---- calibration_tests.md           # log of results from calibration tests
+|---- equipment.md                   # all the equipment ordered for setup
+|---- overview.md                    # overview of whole process (linked above)
+|---- circuit_design/
+|     |---- PCB_designs.md           # designs for PCB 
+|     |---- experimental_setup.md    # details circuit setup (wiring and components)
+|     |---- initial_circuit.md       # initial circuit plan
+|---- component_design/
+|     |---- CAD_designs.md           # designs for PCB holder/sensor support structure
+```
