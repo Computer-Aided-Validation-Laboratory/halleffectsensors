@@ -191,9 +191,9 @@ class Sensitivity:
             writer_obj.writerow(self.uncertainty_in_sens)
 
 if __name__ == "__main__":
-    x = Sensitivity(number = 6, port = '/dev/ttyUSB0', vcc = 5, vcc_un = 0.05,
+    y = Sensitivity(number = 6, port = '/dev/ttyUSB0', vcc = 5, vcc_un = 0.05,
                 filename = 'cal_10(9-12)(9.9-6).csv', bits = 10, samples = 400,
                 calibration_field = 9.9, field_uncertainty = 0.005)
 
     #x.current_comparison(current=, current_uncertainty=, number_of_turns=, coil_radius=)
-    x.perform_calibration()
+    y.perform_calibration()

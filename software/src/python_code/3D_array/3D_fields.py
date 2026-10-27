@@ -350,17 +350,17 @@ class Fields:
         for i in range(self.x_sensors):
             x_column = self.x.columns[i+1]
             x_relative_uncertainty[i] = self.x_field_un[i]
-            self.x[x_column] = self.x[x_column].apply(lambda x: f'{x:.3f} ± {abs(x*x_relative_uncertainty[i]):.3f}')
+            self.x[x_column] = self.x[x_column].apply(lambda x: f'{x:.3f} ± {abs(x*x_relative_uncertainty[i]/100):.3f}')
 
         for i in range(self.y_sensors):
             y_column = self.y.columns[i+1]
             y_relative_uncertainty[i] = self.y_field_un[i]
-            self.y[y_column] = self.y[y_column].apply(lambda x: f'{x:.3f} ± {abs(x*y_relative_uncertainty[i]):.3f}')
+            self.y[y_column] = self.y[y_column].apply(lambda x: f'{x:.3f} ± {abs(x*y_relative_uncertainty[i]/100):.3f}')
 
         for i in range(self.z_sensors):
             z_column = self.z.columns[i+1]
             z_relative_uncertainty[i] = self.z_field_un[i]
-            self.z[z_column] = self.z[z_column].apply(lambda x: f'{x:.3f} ± {abs(x*z_relative_uncertainty[i]):.3f}')
+            self.z[z_column] = self.z[z_column].apply(lambda x: f'{x:.3f} ± {abs(x*z_relative_uncertainty[i]/100):.3f}')
 
         print(self.x)
         print(self.y)

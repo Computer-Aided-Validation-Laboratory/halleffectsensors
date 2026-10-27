@@ -83,13 +83,14 @@ class Nulls:
             None
         '''
         self.uncertainties_in_null = [0]*self.number
-        sensor_uncertainty = 0.5
+        count_uncertainty = 1
         uncertainty_in_vcc = (self.vcc_uncertainty/self.vcc)**2
+        uncertainty_in_bits = (1/(self.levels/2))
 
         for i in range(self.number):
             average_sensor_reading = (self.calibration_df[self.calibration_df.columns[i+1]]).mean()
-            uncertainty_in_reading = ((np.sqrt((sensor_uncertainty)**2+(self.stds[i])**2))/average_sensor_reading)**2
-            rooted = np.sqrt(uncertainty_in_reading+uncertainty_in_vcc)
+            uncertainty_in_reading = ((np.sqrt((count_uncertainty)**2+(self.stds[i])**2))/average_sensor_reading)**2
+            rooted = np.sqrt(uncertainty_in_reading+uncertainty_in_vcc+(uncertainty_in_bits**2))
             self.uncertainties_in_null[i] = (rooted*self.null_values[i])
 
         self.save_values()
