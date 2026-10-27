@@ -1,9 +1,3 @@
-# Project Background
-
-## Project Motivation
-
-talk about why this is important
-
 ## Calculations
 
 Using Hall Effect sensors allows for easy conversion between a ratio metric output and measured field strengths. Each sensor has a conductive plate in it, called the 'Hall Element'. When placed under a magnetic field, a voltage is created across the plate and that potential difference is proportional to the field it is placed under. 
