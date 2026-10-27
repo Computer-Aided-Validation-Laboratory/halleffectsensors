@@ -32,12 +32,12 @@ The method for calculating uncertainties is using the propagation of uncertainti
 
 The equation for calculating the null voltage is:  
 ```math
-null\;voltage = sensor\; count x vcc / bit\; depth
+null\;voltage = sensor\; count\; x\; vcc / bit\; depth
 ```
 
 Therefore, the uncertainty in the null voltage can be calculated by using the following equation:
 ```math
-&delta
+frac{&delta\;null\;voltage}{null\;voltage} = sqrt{frac{&delta\;count}{count}**2 + frac{&delta\;vcc}{vcc}**2 + frac{&delta\;bit\;depth}{bit\;depth}**2}
 ```
 
 
