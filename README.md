@@ -80,4 +80,4 @@ If the .json for the setup being used already exists, it can be used as normal. 
 
 For the **formatting** of the .json file, it must be done in a particular way for the code to recognise it the way it is designed to. For information about how to format it/examples, see this document: [json formatting](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/software/src/jsons/json_formatting.md)
 
-For information about how the uncertainties in the measurements of the fields are calculated, see this document: [uncertainties](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/project_background.md)
+For information about how the uncertainties in the measurements of the fields are calculated, see this document: [calculations](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/software/calculations.md)
