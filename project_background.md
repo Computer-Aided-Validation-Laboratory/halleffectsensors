@@ -14,7 +14,7 @@ The output of the sensor will be an integer within the range of the resolution (
 
 The VCC is the voltage at common collector (just the total range that the voltage can take). This voltage then needs to be adjusted to account for the null voltage (usually about half of the vcc) which is calculated for each sensor in the calibration steps for each sensor array.
 
-$\` Potential Difference = Voltage - Null Voltage \`$
+$\` Potential Difference = Voltage - Null Voltage `$
 
 This potential difference is then directly proportional to the field strength the sensor is placed in. The proportionality factor is a property of the sensor called the 'sensitivity', this value is also calculated during the calibration of the sensor array, its typical value for the sensors used is 3.125mV/Gauss, however, like the null voltage they must be calculated during calibration for each sensor as they won't be the same for all of them. 
 
