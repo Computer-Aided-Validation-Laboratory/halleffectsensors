@@ -36,7 +36,9 @@ null\;voltage = sensor\; count\; x\; vcc / bit\; depth
 ```
 
 Therefore, the uncertainty in the null voltage can be calculated by using the following equation:
-$frac{&delta\;null\;voltage}{null\;voltage} = sqrt{frac{&delta\;count}{count}**2 + frac{&delta\;vcc}{vcc}**2 + frac{&delta\;bit\;depth}{bit\;depth}**2}$
+```math
+\frac{&delta\;null\;voltage}{null\;voltage} = sqrt{\frac{&delta\;count}{count}^2 + \frac{&delta\;vcc}{vcc}^2 + \frac{&delta\;bit\;depth}{bit\;depth}^2}
+```
 
 
 
