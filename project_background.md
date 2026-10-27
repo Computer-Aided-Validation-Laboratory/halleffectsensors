@@ -58,7 +58,7 @@ Therefore:
 
 where
 ```math
-(\frac{\delta\;Voltage}{Voltage})^2 = (\frac{\delta\;count}{count})^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2) + (\delta\;V_{null)^2
+(\frac{\delta\;Voltage}{Voltage})^2 = (\frac{\delta\;count}{count})^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2 + (\delta\;V_{null)^2
 ```
 and 
 ```math
@@ -67,7 +67,7 @@ and
 Therefore, combining the three equations, $(\frac{\delta\;sensitivity}{sensitivity})^2$:
 
 ```math
-(\frac{\delta\;sensitivity}{sensitivity})^2 = (\delta\;sensor)^2 + (std)^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2) + (\delta\;V_{null)^2 + (\frac{\delta\;field}{field})^2
+(\frac{\delta\;sensitivity}{sensitivity})^2 = (\delta\;sensor)^2 + (std)^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2 + (\delta\;V_{null)^2 + (\frac{\delta\;field}{field})^2
 ```
 
 This is calculated in the `sens.py` and `3D_sens.py` scripts in the `perform_calibration()` method for both 1D and 3D arrays.
@@ -83,5 +83,5 @@ so,
 
 ```math
 (\frac{\delta;field\;strength}{field\;strength})^2
-``
+```
 the uncertainty of the sensitivity measurement is already known, so only the voltage measurement needs to be calculated, this uses the exact same formula as before, but is redone as there will be different values for each quantity. The equation isn't written out again here as it can be seen above. These calculations are done in the `fields.py` and `3D_fields.py` scripts in the `into_voltage()`, `field_strengths()` methods in both scripts.
