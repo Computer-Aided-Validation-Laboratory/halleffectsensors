@@ -37,7 +37,7 @@ V_{null} = sensor\; count\; x\; vcc / bit\; depth
 
 Therefore, the uncertainty in the null voltage can be calculated by using the following equation:
 ```math
-\frac{\delta\;V_{null}}{V_{null} = ((\frac{\delta\;count}{count})^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2)^{0.5}
+(\frac{\delta\;V_{null}}{V_{null}) = ((\frac{\delta\;count}{count})^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2)^{0.5}
 ```
 where:
 ```math
@@ -58,7 +58,7 @@ Therefore:
 
 where
 ```math
-(\frac{\delta\;Voltage}{Voltage})^2 = (\frac{\delta\;count}{count})^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2 + (\delta\;V_{null)^2
+(\frac{\delta\;Voltage}{Voltage})^2 = (\frac{\delta\;count}{count})^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2 + (\delta\;V_{null})^2
 ```
 and 
 ```math
@@ -67,7 +67,7 @@ and
 Therefore, combining the three equations, $(\frac{\delta\;sensitivity}{sensitivity})^2$:
 
 ```math
-(\frac{\delta\;sensitivity}{sensitivity})^2 = (\delta\;sensor)^2 + (std)^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2 + (\delta\;V_{null)^2 + (\frac{\delta\;field}{field})^2
+(\frac{\delta\;sensitivity}{sensitivity})^2 = (\delta\;sensor)^2 + (std)^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2 + (\delta\;V_{null})^2 + (\frac{\delta\;field}{field})^2
 ```
 
 This is calculated in the `sens.py` and `3D_sens.py` scripts in the `perform_calibration()` method for both 1D and 3D arrays.
