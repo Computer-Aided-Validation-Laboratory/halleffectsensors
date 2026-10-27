@@ -76,6 +76,6 @@ field\;strength = voltage\;/\;sensitivity
 so,
 
 ```math
-(\frac{\delta\;field\;strength}{field\;strength})^2
+(\frac{\delta\;field\;strength}{field\;strength})^2 = (\frac{\delta\;Voltage}{Voltage})^2 + (\frac{\delta\;sensitivity}{sensitivity})^2
 ```
 the uncertainty of the sensitivity measurement is already known, so only the voltage measurement needs to be calculated, this uses the exact same formula as before, but is redone as there will be different values for each quantity. The equation isn't written out again here as it can be seen above. These calculations are done in the `fields.py` and `3D_fields.py` scripts in the `into_voltage()`, `field_strengths()` methods in both scripts.
