@@ -58,7 +58,9 @@ and
 ```math
 (\frac{\delta\;count}{count})^2 = (\delta\;sensor)^2 + (std)^2
 ```
-Therefore, combining the three equations, $(\frac{\delta\;sensitivity}{sensitivity})^2$:
+Therefore, combining the three equations, 
+
+$(\frac{\deltasensitivity}{sensitivity})^2$:
 
 ```math
 (\frac{\delta\;sensitivity}{sensitivity})^2 = (\delta\;sensor)^2 + (std)^2 + (\frac{\delta\;vcc}{vcc})^2 + (\frac{\delta\;bit\;depth}{bit\;depth})^2 + (\delta\;V_{null})^2 + (\frac{\delta\;field}{field})^2
