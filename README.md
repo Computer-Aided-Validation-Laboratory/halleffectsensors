@@ -69,7 +69,7 @@ pip install .
 ```
 **need to actually make this a package (not done yet)**
 
-Every time the array is used in a new setup, it must be calibrated. When the array is calibrated, it can be placed in an unknown field and it will produce measurements for that fields in 1 or 3 directions. For more information about calibration procedure or previous calibration results, see this document: [calibrations](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/calibrations.md)
+Every time the array is used in a new setup, it must be calibrated. When the array is calibrated, it can be placed in an unknown field and it will produce measurements for that fields in 1 or 3 directions. For more information about calibration procedure or previous calibration results, see this document: [calibrations](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/hardware/calibration.md)
 
 The idea of this project is that it can be used for any sample in any field setup, however in order for the calibration and visualisation methods to work, they must know the details about the setup being used. For using 3D calibration on an extended array (more than 8 sensors), a .json file must be used to specify the required information about each sensor in the array. This information is:     
 - `"index"` : this will be an integer (not in " "), corresponding to the electronic address of the sensor (this information will be on the PCB). This document: [indexes](https://github.com/Computer-Aided-Validation-Laboratory/halleffectsensors/blob/mapping/software/src/jsons/indexes.md) details the corresponding index for each electronic address as well.   
