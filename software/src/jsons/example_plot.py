@@ -1,107 +1,102 @@
 import json
 from pathlib import Path
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import numpy as np
+import pandas as pd
 from scipy.interpolate import griddata
 
-json_path = Path(__file__).parent.parent/'jsons'/'example.json'
-data_path = Path(__file__).parent.parent/'jsons'/'example_data.csv'
 
-data_frame = pd.read_csv(data_path)
+class Plotting:
+    '''cds'''
 
-with open(json_path, encoding = 'utf-8') as f:
-    sensors_data = json.load(f)
+    def __init__(self, json_file: str, data:str, direction:str):
+        
+        self.direction = direction
 
+        self.num_x = 0
+        self.num_y = 0
+        self.num_z = 0
 
-def split_data(data: pd.DataFrame, sensors: json):
-    '''d'''
-    rows = data.shape[0]
+        data_path = Path(__file__).parent/data
+        self.data = pd.read_csv(data_path)
 
-    num_x = 0
-    num_y = 0
-    num_z = 0
+        json_path = Path(__file__).parent/json_file
+        with open(json_path, encoding = 'utf-8') as f:
+            self.json = json.load(f)
 
-    for sensor in sensors["sensors"]:
-        if sensor["direction"] == "x":
-            num_x+=1
-        elif sensor["direction"] == "y":
-            num_y +=1
-        elif sensor["direction"] == "z":
-            num_z +=1
-        else:
-            print("direction error, check .json")
+        self.x_data = None
+        self.y_data = None
+        self.z_data = None
 
-    x_dataframe = pd.DataFrame(np.zeros((rows, (num_x+1))), dtype = float)
-    y_dataframe = pd.DataFrame(np.zeros((rows, (num_y+1))), dtype = float)
-    z_dataframe = pd.DataFrame(np.zeros((rows, (num_z+1))), dtype = float)
+        self.timestamps = None
+        self.number = None
+        self.plotting = None
 
-    i = x = z = y = 0
+        self.x_coords = None
+        self.y_coords = None
 
-    for sensor in sensors["sensors"]:
-        i +=1
-        if sensor["index"] == i:
+    def split_data(self) -> None:
+        '''ds'''
+        rows = self.data.shape[0]
+
+        self.timestamps = self.data.iloc[:,0].to_numpy()
+
+        for sensor in self.json["sensors"]:
             if sensor["direction"] == "x":
-                x_dataframe[x_dataframe.columns[x+1]] = data[data.columns[i]]
-                x+=1
+                self.num_x +=1
             elif sensor["direction"] == "y":
-                y_dataframe[y_dataframe.columns[y+1]] = data[data.columns[i]]
-                y+=1
+                self.num_y += 1
             elif sensor["direction"] == "z":
-                z_dataframe[z_dataframe.columns[z+1]] = data[data.columns[i]]
-                z+=1
+                self.num_z += 1
 
-    x_dataframe[x_dataframe.columns[0]] = data[data.columns[0]]
-    y_dataframe[y_dataframe.columns[0]] = data[data.columns[0]]
-    z_dataframe[z_dataframe.columns[0]] = data[data.columns[0]]
+        self.x_data = pd.DataFrame(np.zeros((rows,(self.num_x+1))),dtype = float)
+        self.y_data = pd.DataFrame(np.zeros((rows,(self.num_y+1))),dtype = float)
+        self.z_data = pd.DataFrame(np.zeros((rows,(self.num_z+1))),dtype = float)
 
-    return x_dataframe, y_dataframe, z_dataframe, num_x, num_y, num_z
+        self.x_data[self.x_data.columns[0]] = self.data[self.data.columns[0]]
+        self.y_data[self.y_data.columns[0]] = self.data[self.data.columns[0]]
+        self.z_data[self.z_data.columns[0]] = self.data[self.data.columns[0]]
 
-def x_plot(data: pd.DataFrame, number:int, sensors):
-    '''d'''
-    x_coord = np.empty(number)
-    y_coord = np.empty(number)
-    index = 0
+        i = x = y = z = 0
 
-    for sensor in sensors["sensors"]:
-        if sensor["direction"] == "x":
-            x_coord[index] = sensor["coordinate"][0]
-            y_coord[index] = sensor["coordinate"][1]
-            index += 1
-
-    timestamps = data[data.columns[0]].to_numpy()
-    print(data[data.columns[0]])
-
-    xi = np.linspace(0, 1, 100)
-    yi = np.linspace(0, 4, 100)
-    X, Y = np.meshgrid(xi, yi)
-
-    fig, ax = plt.subplots()
-    cbar = None
-
-    for i in range(number):
-        data[data.columns[i+1]] = (((data[data.columns[i+1]])*5/1023)-2.5)*1000/31.25
-
-    for t in range(data.shape[0]):
-
-        values = data.iloc[t, 1:11].to_numpy()
-
-        Z = griddata((x_coord, y_coord),values,(X, Y),method='cubic')
-
-        ax.clear()
-        im = ax.contourf(X, Y, Z, levels=100, cmap='viridis')
-        ax.scatter(x_coord, y_coord, c='red', s=50)
-        ax.set_title(f"t={timestamps[t]:.2f} s")
-
-        if cbar is not None:
-            cbar.remove()
-        cbar = fig.colorbar(im)
-
-        plt.pause(0.25)
-
-    plt.show()
+        for sensor in self.json["sensors"]:
+            i+=1
+            if sensor["index"] == i:
+                if sensor["direction"] == "x":
+                    self.x_data[self.x_data.columns[x+1]] = self.data[self.data.columns[i]]
+                    x+=1
+                elif sensor["direction"] == "y":
+                    self.y_data[self.y_data.columns[y+1]] = self.data[self.data.columns[i]]
+                    y+=1
+                elif sensor["direction"] == "z":
+                    self.z_data[self.z_data.columns[z+1]] = self.data[self.data.columns[i]]
+                    z+=1
 
 
-if __name__ == "__main__":
-    x_data, y_data, z_data, x_num, y_num, z_num = split_data(data = data_frame, sensors = sensors_data)
-    x_plot(data = x_data, number = x_num, sensors = sensors_data)
+    def plot_map(self) -> None:
+        '''ds'''
+
+        if self.direction == "x":
+            self.data = self.x_data
+            self.number = self.num_x
+        elif self.direction == "y":
+            self.data = self.y_data
+            self.number = self.num_y
+        elif self.direction == "z":
+            self.data = self.z_data
+            self.number = self.num_z
+
+        vmin = self.data.iloc[:, 1:].min().min()
+        vmax = self.data.iloc[:, 1:].max().max()
+
+        self.plotting = self.data.iloc[0].to_numpy()[1:]
+
+        
+
+
+
+
+
+
+        
