@@ -1,0 +1,34 @@
+{
+  "sensors":[
+    {
+        "index": 1,
+        "coordinate": [0,0],
+        "direction":"z"
+    },
+    {
+        "index": 2,
+        "coordinate": [1,0],
+        "direction":"z"
+    },
+    {
+        "index": 3,
+        "coordinate": [0,1],
+        "direction":"z"
+    },
+    {
+        "index": 4,
+        "coordinate": [1,1],
+        "direction":"z"
+    },
+    {
+        "index": 5,
+        "coordinate": [1,2],
+        "direction":"z"
+    },
+    {
+        "index": 6,
+        "coordinate": [0,2],
+        "direction":"z"
+    }
+  ]
+}
