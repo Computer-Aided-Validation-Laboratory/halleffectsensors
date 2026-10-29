@@ -78,3 +78,9 @@ so,
 (\frac{\delta\;field\;strength}{field\;strength})^2 = (\frac{\delta\;Voltage}{Voltage})^2 + (\frac{\delta\;sensitivity}{sensitivity})^2
 ```
 the uncertainty of the sensitivity measurement is already known, so only the voltage measurement needs to be calculated, this uses the exact same formula as before, but is redone as there will be different values for each quantity. The equation isn't written out again here as it can be seen above. These calculations are done in the `fields.py` and `3D_fields.py` scripts in the `into_voltage()`, `field_strengths()` methods in both scripts.
+
+# Units
+
+This section will just go through the units that everything is calculated/stored in so there is no confusion. 
+
+For the calibrations, the input is the calibration field, this should be inputted in **mT**. The null voltages are calculated in Volts and stored in Volts. The sensitivity values are calculated in **mV/G** in the 1D calibration, for the 3D calibration, they are calculated in **mV/mT**. Both 1D and 3D calibration software output the field strengths in **mT**.
