@@ -291,7 +291,7 @@ class Plotting:
         runs all the methods in the class, runs the animation and saves the
         animation in specified filename
         Args:
-            filename (str): name of the file that the animation is saved to
+            filename (str): name of the file that the animation is saved under
         Returns:
             None
         '''
