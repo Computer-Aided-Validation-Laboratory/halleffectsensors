@@ -179,5 +179,5 @@ Returns:
 
 #### Output:
 The output of a 3D calibration test will be three data frames, in the order of x, y and z data. They will look like this (below) with the field measured at each sensor and the uncertainty in each measurement:
+<img width="1204" height="286" alt="image" src="https://github.com/user-attachments/assets/115ab528-0460-4820-a423-fd3b685fcc3e" />
 
-<img width="792" height="360" alt="image" src="https://github.com/user-attachments/assets/64c28932-e36d-4919-b8fe-8872556e8ff4" />   
