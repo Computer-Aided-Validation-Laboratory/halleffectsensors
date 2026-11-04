@@ -48,10 +48,10 @@ class Plotting:
         self.num_y = 0
         self.num_z = 0
 
-        data_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'calib_data'/data
+        data_path = Path(__file__).parent.parent/'src'/'python_code'/'3D_array'/'calib_data'/data
         self.data = pd.read_csv(data_path)
 
-        json_path = Path(__file__).parent.parent/'python_code'/'3D_array'/json_file
+        json_path = Path(__file__).parent.parent/'src'/'python_code'/'3D_array'/json_file
         with open(json_path, encoding = 'utf-8') as f:
             self.json = json.load(f)
 
@@ -143,11 +143,11 @@ class Plotting:
         self.nulls = np.empty(self.number)
 
         if self.direction == "x":
-            sens_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/'x_sens.csv'
+            sens_path = Path(__file__).parent.parent/'src'/'python_code'/'3D_array'/'csv'/'x_sens.csv'
         elif self.direction == "y":
-            sens_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/'y_sens.csv'
+            sens_path = Path(__file__).parent.parent/'src'/'python_code'/'3D_array'/'csv'/'y_sens.csv'
         else:
-            sens_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/'z_sens.csv'
+            sens_path = Path(__file__).parent.parent/'src'/'python_code'/'3D_array'/'csv'/'z_sens.csv'
 
         sens_df = pd.read_csv(sens_path, header = None)
 
@@ -158,7 +158,7 @@ class Plotting:
             nulls_file = 'nulls_and_uncertainties.csv'
         else:
             nulls_file = 'nulls_and_uns_1.csv'
-        nulls_paths = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/nulls_file
+        nulls_paths = Path(__file__).parent.parent/'src'/'python_code'/'3D_array'/'csv'/nulls_file
         nulls_df = pd.read_csv(nulls_paths, header = None)
 
         directions = nulls_df.shape[0] / 2
@@ -202,9 +202,7 @@ class Plotting:
         for i in range(self.number):
             self.data[self.data.columns[i+1]] = self.data[self.data.columns[i+1]]*6.144/self.bits
             self.data[self.data.columns[i+1]] = self.data[self.data.columns[i+1]]-self.nulls[i]
-            self.data[self.data.columns[i+1]] = self.data[self.data.columns[i+1]]*1000/self.sens[i]
-
-        self.data = abs(self.data)
+            self.data[self.data.columns[i+1]] = abs(self.data[self.data.columns[i+1]]*1000/self.sens[i])
 
     def plot_map(self) -> None:
         '''
@@ -310,5 +308,5 @@ class Plotting:
 
 
 if __name__ == "__main__":
-    a = Plotting(json_file = '1D_calib_setup.json', data = 'cal_7.csv', direction = "z", bits = 15)
+    a = Plotting(json_file = '3D_calib_setup.json', data = 'cal_7.csv', direction = "z", bits = 15)
     a.run(filename = 'animation.mp4')

@@ -1,3 +1,10 @@
-talk about interpolation methods here - if i manage to get good plots of the self.x, self.y. self.z data frames that I can put in that will be super helpful and can talk about the coordinates/config file issues here
-<img width="605" height="609" alt="image" src="https://github.com/user-attachments/assets/545601e1-6831-4ff3-8a48-57c3b24cb8ed" />
-(from cal12.csv)
+# Interpolation Methods
+
+The end goal for the visualisation of the fields is to be able to view this in MatchID. The current setup is just python mapping of the fields as a way to visualise the fields before the MatchID link is made. The code runs from `example_plot.py` and takes inputs for the data being mapped, the setup of the sensor array and the filename for where the animation is stored. 
+
+The output is an mp4 file, which will be saved in this directory and also displayed when the file is run. For this software it is imperative that the information in the json is correct and the coordinates are corresponding to their physical position.
+
+The script gets the raw count data from the csv file and converts it to field measurements to display. There is an input for what direction of the field to be mapped. 
+
+The output looks like a map like this (obviously in video form):
+<img width="463" height="547" alt="image" src="https://github.com/user-attachments/assets/32141446-ef54-410a-b68a-459b6ffbae31" />
