@@ -170,8 +170,14 @@ class Nulls:
         '''
 
         file_dir = (Path(__file__).parent / 'csv')
-        output_nulls = file_dir/'nulls_and_uncertainties.csv'
-        output_stds = file_dir/'stds.csv'
+        if self.json == "3D_calib_setup.json":
+            filename_nulls = 'nulls_and_uncertainties.csv'
+            filename_stds = 'stds.csv'
+        else:
+            filename_nulls = 'nulls_and_uns_1.csv'
+            filename_stds = 'stds_1.csv'
+        output_nulls = file_dir/filename_nulls
+        output_stds = file_dir/filename_stds
 
         with open(output_nulls, 'w', encoding = 'utf-8', newline = '') as f:
             writer_obj = writer(f)
@@ -193,5 +199,5 @@ class Nulls:
         '''required as if nothing is passed through then '''
 
 if __name__ == '__main__':
-    x = Nulls(number = 8, port = '/dev/ttyUSB0', vcc = 6.144, filename = 'nulls_data_3D.csv',
-              vcc_un = 0.005, resolution = 15, json = '3D_calib_setup.json', samples = 100)
+    x = Nulls(number = 8, port = '/dev/ttyUSB0', vcc = 6.144, filename = 'nulls_data.csv',
+              vcc_un = 0.005, resolution = 15, json = '1D_calib_setup.json', samples = 100)

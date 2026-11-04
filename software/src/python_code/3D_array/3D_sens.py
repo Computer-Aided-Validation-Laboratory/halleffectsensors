@@ -132,10 +132,10 @@ class Sensitivities:
 
         csv_path = Path(__file__).parent / 'csv'
         if self.json == '3D_calib_setup.json':
-            nulls_and_uncertainties_df = pd.read_csv(csv_path / 'nulls_and_uncertainties.csv', header = None)
+            nulls_and_uncertainties_df = pd.read_csv(csv_path/'nulls_and_uncertainties.csv', header = None)
             stds_df = pd.read_csv(csv_path / 'stds.csv', header = None)
         elif self.json == '1D_calib_setup.json':
-            nulls_and_uncertainties_df = pd.read_csv(csv_path / 'nulls_and_uns_1.csv', header = None)
+            nulls_and_uncertainties_df = pd.read_csv(csv_path/'nulls_and_uns_1.csv', header = None)
             stds_df = pd.read_csv(csv_path / 'stds_1.csv', header = None)
         else:
             stds_df = None
@@ -180,7 +180,7 @@ class Sensitivities:
             self.x_stds = None
             self.y_stds = stds_df.iloc[0]
             self.z_stds = None
-                
+
         elif self.y_sensors == 0 and self.x_sensors != 0 and self.z_sensors != 0:
             self.x_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
             self.y_nulls = None
@@ -426,8 +426,8 @@ class Sensitivities:
 
 if __name__ == '__main__':
     x = Sensitivities(number = 8, port = '/dev/ttyUSB0', vcc = 6.144, vcc_un = 0.05,
-                    filename = 'cal_9.csv', resolution = 15,
-                    samples = 200, calibration_field = [149/1000,140/1000,114/1000], field_abs_un = 0.05,
-                    json = '3D_calib_setup.json', inputs = False)
+                    filename = 'cal_4.csv', resolution = 15, samples = 200,
+                    calibration_field = [444/1000,409/1000,296/1000], field_abs_un = 0.05,
+                    json = '1D_calib_setup.json', inputs = False)
     x.current_comparison(current=[5.936,5.458,6], current_abs_uncertainty=0.005,
                          number_of_turns=50, coil_radius=1)

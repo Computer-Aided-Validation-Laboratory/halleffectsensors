@@ -308,5 +308,5 @@ class Plotting:
 
 
 if __name__ == "__main__":
-    a = Plotting(json_file = '3D_calib_setup.json', data = 'cal_7.csv', direction = "z", bits = 15)
+    a = Plotting(json_file = '1D_calib_setup.json', data = 'cal_4.csv', direction = "z", bits = 15)
     a.run(filename = 'animation.mp4')
