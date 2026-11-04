@@ -147,7 +147,8 @@ Attributes:
 Methods:
 * `data_split() -> None`: uses the `split_data` function to separate the incoming data being read from the sensor array into x, y and z directional data frames
 * `define() -> None`: defines all the nulls/sens/uncertainties/stds variables that will be imported and saved from other classes
-* `get_params() -> None`: gets the values of the variables defined in the previous method
+* `get_nulls() -> None`: gets the values of the null voltages defined in the previous method
+* `getting_sens() -> None`: saves the sensitivity values correctly from their csvs
 * `into_voltage() -> None`: converts the incoming data into voltages by multiplying them by a scale factor and then subtracting the null voltage of each sensor from that sensors data. also tracks the uncertainties through this calculation
 * `field_strengths() -> None`: converts the voltages into field strengths by multiplying each sensor by the previously calculated values for sensitivities for that sensor. also calculates the overall uncertainty in the field strength measurement
 * `house_keeping() -> None`: customises the output data frames to make them easier to read, changes the column titles and converts the time into s from ms. displays the uncertainty in each measurement next to the field result
@@ -178,5 +179,5 @@ Returns:
 
 #### Output:
 The output of a 3D calibration test will be three data frames, in the order of x, y and z data. They will look like this (below) with the field measured at each sensor and the uncertainty in each measurement:
+<img width="1204" height="286" alt="image" src="https://github.com/user-attachments/assets/115ab528-0460-4820-a423-fd3b685fcc3e" />
 
-<img width="792" height="360" alt="image" src="https://github.com/user-attachments/assets/64c28932-e36d-4919-b8fe-8872556e8ff4" />   
