@@ -130,22 +130,108 @@ class Sensitivities:
         self.y_sens_un = np.empty(self.y_sensors)
         self.z_sens_un = np.empty(self.z_sensors)
 
-        path_nulls_uncertainties = Path(__file__).parent / 'csv'
-        parameters_df = pd.read_csv(path_nulls_uncertainties / 'nulls_and_uncertainties.csv', header = None)
-        path_stds = Path(__file__).parent / 'csv'
-        stds_df = pd.read_csv(path_stds / 'stds.csv', header = None)
+        csv_path = Path(__file__).parent / 'csv'
+        if self.json == '3D_calib_setup.json':
+            nulls_and_uncertainties_df = pd.read_csv(csv_path / 'nulls_and_uncertainties.csv', header = None)
+            stds_df = pd.read_csv(csv_path / 'stds.csv', header = None)
+        elif self.json == '1D_calib_setup.json':
+            nulls_and_uncertainties_df = pd.read_csv(csv_path / 'nulls_and_uns_1.csv', header = None)
+            stds_df = pd.read_csv(csv_path / 'stds_1.csv', header = None)
+        else:
+            stds_df = None
+            nulls_and_uncertainties_df = None
+            print("incorrect json file inputted")
 
-        self.x_nulls = parameters_df.iloc[0].to_numpy()
-        self.y_nulls = parameters_df.iloc[1].to_numpy()
-        self.z_nulls = parameters_df.iloc[2].to_numpy()
+        if self.x_sensors == 0 and self.y_sensors != 0 and self.z_sensors != 0:
+            self.x_nulls = None
+            self.y_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
+            self.z_nulls = nulls_and_uncertainties_df.iloc[1].to_numpy()
 
-        self.x_nulls_un = parameters_df.iloc[3].to_numpy()
-        self.y_nulls_un = parameters_df.iloc[4].to_numpy()
-        self.z_nulls_un = parameters_df.iloc[5].to_numpy()
+            self.x_nulls_un = None
+            self.y_nulls_un = nulls_and_uncertainties_df.iloc[2].to_numpy()
+            self.z_nulls_un = nulls_and_uncertainties_df.iloc[3].to_numpy()
 
-        self.x_stds = stds_df.iloc[0].to_numpy()
-        self.y_stds = stds_df.iloc[1].to_numpy()
-        self.z_stds = stds_df.iloc[2].to_numpy()
+            self.x_stds = None
+            self.y_stds = stds_df.iloc[0]
+            self.z_stds = stds_df.iloc[1]
+
+        elif self.y_sensors == 0 and self.x_sensors == 0 and self.z_sensors != 0:
+            self.x_nulls = None
+            self.y_nulls = None
+            self.z_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
+
+            self.x_nulls_un = None
+            self.y_nulls_un = None
+            self.z_nulls_un = nulls_and_uncertainties_df.iloc[1].to_numpy()
+
+            self.x_stds = None
+            self.y_stds = None
+            self.z_stds = stds_df.iloc[0]
+
+        elif self.z_sensors == 0 and self.x_sensors == 0 and self.y_sensors != 0:
+            self.x_nulls = None
+            self.y_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
+            self.z_nulls = None
+
+            self.x_nulls_un = None
+            self.y_nulls_un = nulls_and_uncertainties_df.iloc[1].to_numpy()
+            self.z_nulls_un = None
+
+            self.x_stds = None
+            self.y_stds = stds_df.iloc[0]
+            self.z_stds = None
+                
+        elif self.y_sensors == 0 and self.x_sensors != 0 and self.z_sensors != 0:
+            self.x_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
+            self.y_nulls = None
+            self.z_nulls = nulls_and_uncertainties_df.iloc[1].to_numpy()
+
+            self.x_nulls_un = nulls_and_uncertainties_df.iloc[2].to_numpy()
+            self.y_nulls_un = None
+            self.z_nulls_un = nulls_and_uncertainties_df.iloc[3].to_numpy()
+
+            self.x_stds = stds_df.iloc[0]
+            self.y_stds = None
+            self.z_stds = stds_df.iloc[1]
+
+        elif self.z_sensors == 0 and self.y_sensors == 0 and self.x_sensors != 0:
+            self.x_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
+            self.y_nulls = None
+            self.z_nulls = None
+
+            self.x_nulls_un = nulls_and_uncertainties_df.iloc[1].to_numpy()
+            self.y_nulls_un = None
+            self.z_nulls_un = None
+
+            self.x_stds = stds_df.iloc[0]
+            self.y_stds = None
+            self.z_stds = None
+
+        elif self.z_sensors == 0 and self.x_sensors != 0 and self.y_sensors != 0:
+            self.x_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
+            self.y_nulls = nulls_and_uncertainties_df.iloc[1].to_numpy()
+            self.z_nulls = None
+
+            self.x_nulls_un = nulls_and_uncertainties_df.iloc[2].to_numpy()
+            self.y_nulls_un = nulls_and_uncertainties_df.iloc[3].to_numpy()
+            self.z_nulls_un = None
+
+            self.x_stds = stds_df.iloc[0]
+            self.y_stds = stds_df.iloc[1]
+            self.z_stds = None
+
+        else:
+            self.x_nulls = nulls_and_uncertainties_df.iloc[0].to_numpy()
+            self.y_nulls = nulls_and_uncertainties_df.iloc[1].to_numpy()
+            self.z_nulls = nulls_and_uncertainties_df.iloc[2].to_numpy()
+
+            self.x_nulls_un = nulls_and_uncertainties_df.iloc[3].to_numpy()
+            self.y_nulls_un = nulls_and_uncertainties_df.iloc[4].to_numpy()
+            self.z_nulls_un = nulls_and_uncertainties_df.iloc[5].to_numpy()
+
+            self.x_stds = stds_df.iloc[0]
+            self.y_stds = stds_df.iloc[1]
+            self.z_stds = stds_df.iloc[2]
 
 
     def current_comparison(self, current: np.array, current_abs_uncertainty: float,
@@ -185,14 +271,7 @@ class Sensitivities:
         print(f'expected field (z):{z_expected_field} ± {z_field_uncertainty}, actual field (z): {self.calibration_field[2]}')
         print(f'% difference: {z_diff}')
 
-        if self.calibration_field[0] != 0:
-            self.perform_calibration_x()
-        if self.calibration_field[1] != 0:
-            self.perform_calibration_y()
-        if self.calibration_field[2] != 0:
-            self.perform_calibration_z()
-
-        self.saving_sens()
+        self.perform_calibration_x()
 
     def perform_calibration_x(self) -> None:
         '''
@@ -205,26 +284,28 @@ class Sensitivities:
             None
         '''
 
-        x_data_un = self.x.copy()
+        if self.x.shape[1] != 1:
+            x_data_un = self.x.copy()
 
-        for i in range(self.x_sensors):
-            self.x[self.x.columns[i+1]] = self.x[self.x.columns[i+1]]*self.vcc/self.bits
-            self.x[self.x.columns[i+1]] -= self.x_nulls[i]
-            self.x_sens[i] = np.mean((self.x[self.x.columns[i+1]]/self.calibration_field[0])*1000)
+            for i in range(self.x_sensors):
+                self.x[self.x.columns[i+1]] = self.x[self.x.columns[i+1]]*self.vcc/self.bits
+                self.x[self.x.columns[i+1]] -= self.x_nulls[i]
+                self.x_sens[i] = np.mean((self.x[self.x.columns[i+1]]/self.calibration_field[0])*1000)
 
-            average_count = np.mean(x_data_un[x_data_un.columns[i+1]])
-            count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.x_stds[i])**2))/average_count)**2
-            average_voltage = np.mean((x_data_un[x_data_un.columns[i+1]])*self.vcc/self.bits)
-            uncertainty_in_voltage = (average_voltage*(np.sqrt(count_uncertainty+self.uncertainty_in_vcc)))**2
-            uncertainty_in_voltage_nulls = np.sqrt(uncertainty_in_voltage+(self.x_nulls_un[i])**2)
-            x_data_un[x_data_un.columns[i+1]] *= self.vcc/self.bits
-            x_data_un[x_data_un.columns[i+1]] = x_data_un[x_data_un.columns[i+1]]-self.x_nulls[i]
-            total_null_uncertainty = (uncertainty_in_voltage_nulls/np.mean(x_data_un[x_data_un.columns[i+1]]))**2
-            x_field_uncertainty = (self.field_abs_uncertainty/self.calibration_field[0])**2
+                average_count = np.mean(x_data_un[x_data_un.columns[i+1]])
+                count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.x_stds[i])**2))/average_count)**2
+                average_voltage = np.mean((x_data_un[x_data_un.columns[i+1]])*self.vcc/self.bits)
+                uncertainty_in_voltage = (average_voltage*(np.sqrt(count_uncertainty+self.uncertainty_in_vcc)))**2
+                uncertainty_in_voltage_nulls = np.sqrt(uncertainty_in_voltage+(self.x_nulls_un[i])**2)
+                x_data_un[x_data_un.columns[i+1]] *= self.vcc/self.bits
+                x_data_un[x_data_un.columns[i+1]] = (x_data_un[x_data_un.columns[i+1]]-self.x_nulls[i])*1000 #into mV for un
+                total_null_uncertainty = (uncertainty_in_voltage_nulls/np.mean(x_data_un[x_data_un.columns[i+1]]))**2
+                x_field_uncertainty = (self.field_abs_uncertainty/self.calibration_field[0])**2
 
-            self.x_sens_un[i] = (np.sqrt(total_null_uncertainty+x_field_uncertainty))*self.x_sens[i]
+                self.x_sens_un[i] = (np.sqrt(total_null_uncertainty+x_field_uncertainty))*(self.x_sens[i]/10)
 
-        
+        self.perform_calibration_y()
+
     def perform_calibration_y(self) -> None:
         '''
         calibrates all the directionally 'y' sensors in the array against the y
@@ -235,25 +316,27 @@ class Sensitivities:
         Returns:
             None        
         '''
-        y_data_un = self.y.copy()
+        if self.y.shape[1] != 1:
+            y_data_un = self.y.copy()
 
-        for i in range(self.y_sensors):
-            self.y[self.y.columns[i+1]] = self.y[self.y.columns[i+1]]*self.vcc/self.bits
-            self.y[self.y.columns[i+1]] -= self.y_nulls[i]
-            self.y_sens[i] = np.mean((self.y[self.y.columns[i+1]]/self.calibration_field[1])*1000)
+            for i in range(self.y_sensors):
+                self.y[self.y.columns[i+1]] = self.y[self.y.columns[i+1]]*self.vcc/self.bits
+                self.y[self.y.columns[i+1]] -= self.y_nulls[i]
+                self.y_sens[i] = np.mean((self.y[self.y.columns[i+1]]/self.calibration_field[1])*1000)
 
-            average_count = np.mean(y_data_un[y_data_un.columns[i+1]])
-            count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.y_stds[i])**2))/average_count)**2
-            average_voltage = np.mean((y_data_un[y_data_un.columns[i+1]])*self.vcc/self.bits)
-            uncertainty_in_voltage = (average_voltage*(np.sqrt(count_uncertainty+self.uncertainty_in_vcc)))**2
-            uncertainty_in_voltage_nulls = np.sqrt(uncertainty_in_voltage+(self.y_nulls_un[i])**2)
-            y_data_un[y_data_un.columns[i+1]] *= self.vcc/self.bits
-            y_data_un[y_data_un.columns[i+1]] = y_data_un[y_data_un.columns[i+1]]-self.y_nulls[i]
-            total_null_uncertainty = (uncertainty_in_voltage_nulls/np.mean(y_data_un[y_data_un.columns[i+1]]))**2
-            y_field_uncertainty = (self.field_abs_uncertainty/self.calibration_field[1])**2
+                average_count = np.mean(y_data_un[y_data_un.columns[i+1]])
+                count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.y_stds[i])**2))/average_count)**2
+                average_voltage = np.mean((y_data_un[y_data_un.columns[i+1]])*self.vcc/self.bits)
+                uncertainty_in_voltage = (average_voltage*(np.sqrt(count_uncertainty+self.uncertainty_in_vcc)))**2
+                uncertainty_in_voltage_nulls = np.sqrt(uncertainty_in_voltage+(self.y_nulls_un[i])**2)
+                y_data_un[y_data_un.columns[i+1]] *= self.vcc/self.bits
+                y_data_un[y_data_un.columns[i+1]] = (y_data_un[y_data_un.columns[i+1]]-self.y_nulls[i])*1000
+                total_null_uncertainty = (uncertainty_in_voltage_nulls/np.mean(y_data_un[y_data_un.columns[i+1]]))**2
+                y_field_uncertainty = (self.field_abs_uncertainty/self.calibration_field[1])**2
 
-            self.y_sens_un[i] = (np.sqrt(total_null_uncertainty+y_field_uncertainty))*self.y_sens[i]
+                self.y_sens_un[i] = (np.sqrt(total_null_uncertainty+y_field_uncertainty))*(self.y_sens[i]/10)
 
+        self.perform_calibration_z()
 
     def perform_calibration_z(self) -> None:
         '''
@@ -265,24 +348,27 @@ class Sensitivities:
         Returns:
             None        
         '''
-        z_data_un = self.z.copy()
+        if self.z.shape[1] != 1:
+            z_data_un = self.z.copy()
 
-        for i in range(self.z_sensors):
-            self.z[self.z.columns[i+1]] = self.z[self.z.columns[i+1]]*self.vcc/self.bits
-            self.z[self.z.columns[i+1]] -= self.z_nulls[i]
-            self.z_sens[i] = np.mean((self.z[self.z.columns[i+1]]/self.calibration_field[2])*1000)
+            for i in range(self.z_sensors):
+                self.z[self.z.columns[i+1]] = self.z[self.z.columns[i+1]]*self.vcc/self.bits
+                self.z[self.z.columns[i+1]] -= self.z_nulls[i]
+                self.z_sens[i] = np.mean((self.z[self.z.columns[i+1]]/self.calibration_field[2])*1000)
 
-            average_count = np.mean(z_data_un[z_data_un.columns[i+1]])
-            count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.z_stds[i])**2))/average_count)**2
-            average_voltage = np.mean((z_data_un[z_data_un.columns[i+1]])*self.vcc/self.bits)
-            uncertainty_in_voltage = (average_voltage*(np.sqrt(count_uncertainty+self.uncertainty_in_vcc)))**2
-            uncertainty_in_voltage_nulls = np.sqrt(uncertainty_in_voltage+(self.z_nulls_un[i])**2)
-            z_data_un[z_data_un.columns[i+1]] *= self.vcc/self.bits
-            z_data_un[z_data_un.columns[i+1]] = z_data_un[z_data_un.columns[i+1]]-self.z_nulls[i]
-            total_null_uncertainty = (uncertainty_in_voltage_nulls/np.mean(z_data_un[z_data_un.columns[i+1]]))**2
-            z_field_uncertainty = (self.field_abs_uncertainty/self.calibration_field[2])**2
+                average_count = np.mean(z_data_un[z_data_un.columns[i+1]])
+                count_uncertainty = ((np.sqrt(((self.sensor_uncertainty)**2)+(self.z_stds[i])**2))/average_count)**2
+                average_voltage = np.mean((z_data_un[z_data_un.columns[i+1]])*self.vcc/self.bits)
+                uncertainty_in_voltage = (average_voltage*(np.sqrt(count_uncertainty+self.uncertainty_in_vcc)))**2
+                uncertainty_in_voltage_nulls = np.sqrt(uncertainty_in_voltage+(self.z_nulls_un[i])**2)
+                z_data_un[z_data_un.columns[i+1]] *= self.vcc/self.bits
+                z_data_un[z_data_un.columns[i+1]] = (z_data_un[z_data_un.columns[i+1]]-self.z_nulls[i])*1000
+                total_null_uncertainty = (uncertainty_in_voltage_nulls/np.mean(z_data_un[z_data_un.columns[i+1]]))**2
+                z_field_uncertainty = (self.field_abs_uncertainty/self.calibration_field[2])**2
 
-            self.z_sens_un[i] = (np.sqrt(total_null_uncertainty+z_field_uncertainty))*self.z_sens[i]
+                self.z_sens_un[i] = (np.sqrt(total_null_uncertainty+z_field_uncertainty))*(self.z_sens[i]/10)
+
+        self.saving_sens()
 
     def saving_sens(self) -> None:
         '''
@@ -304,6 +390,14 @@ class Sensitivities:
         x_output_un = file_dir / 'x_uns.csv'
         y_output_un = file_dir / 'y_uns.csv'
         z_output_un = file_dir / 'z_uns.csv'
+
+        self.x_sens = abs(self.x_sens)
+        self.y_sens = abs(self.y_sens)
+        self.z_sens = abs(self.z_sens)
+
+        self.x_sens_un = abs(self.x_sens_un)
+        self.y_sens_un = abs(self.y_sens_un)
+        self.z_sens_un = abs(self.z_sens_un)
 
         with open(x_output_sen, 'a', encoding = 'utf-8', newline = '') as f:
             writer_obj = writer(f)
@@ -331,9 +425,9 @@ class Sensitivities:
 
 
 if __name__ == '__main__':
-    x = Sensitivities(number = 9, port = '/dev/ttyUSB0', vcc = 5.0, vcc_un = 0.05,
-                    filename = 'calibration_field_1.csv', resolution = 10,
-                    samples = 400, calibration_field = [46.9,47.5,45.2], field_abs_un = 0.05,
-                    json = 'json.json', inputs = False)
-    x.current_comparison(current=[2,2,2], current_abs_uncertainty=0.05,
-                         number_of_turns=50, coil_radius=2)
+    x = Sensitivities(number = 8, port = '/dev/ttyUSB0', vcc = 6.144, vcc_un = 0.05,
+                    filename = 'cal_9.csv', resolution = 15,
+                    samples = 200, calibration_field = [149/1000,140/1000,114/1000], field_abs_un = 0.05,
+                    json = '3D_calib_setup.json', inputs = False)
+    x.current_comparison(current=[5.936,5.458,6], current_abs_uncertainty=0.005,
+                         number_of_turns=50, coil_radius=1)

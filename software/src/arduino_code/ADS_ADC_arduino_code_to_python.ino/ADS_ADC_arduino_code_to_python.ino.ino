@@ -10,7 +10,7 @@ Adafruit_ADS1115 ads;
 
 void tcaSelect(uint8_t channel) {
   if (channel > 7) return;
-  Wire.beginTransmission(TCA9548A_ADDR);
+  Wire.beginTransmission(TCA_ADDR);
   Wire.write(1 << channel);
   Wire.endTransmission();
  }
@@ -19,9 +19,9 @@ void setup() {
   Serial.begin(115200;
   Wire.begin();
 
-  for (uint8_t = 0; i < NUM_ADCS; i++) {
+  for (uint8_t i = 0; i < NUM_ADCS; i++) {
     tcaSelect(i);
-    if (!ads.begin(ADS1115_ADDR)) {
+    if (!ads.begin(ADS_ADDR)) {
       Serial.print("error: ADC MUX ");
       Serial.println(i);
       while (1);

@@ -83,7 +83,6 @@ class Nulls:
         '''
 
         self.x, self.y, self.z, self.x_sensors, self.y_sensors, self.z_sensors = split_data(self.port, self.filename, self.samples, self.json)
-        print(self.x)
         self.find_nulls()
 
     def find_nulls(self) -> None:
@@ -190,6 +189,9 @@ class Nulls:
             writer_obj.writerow(self.y_stds)
             writer_obj.writerow(self.z_stds)
 
+    def if_empty(self) -> None:
+        '''required as if nothing is passed through then '''
+
 if __name__ == '__main__':
-    x = Nulls(number = 9, port = '/dev/ttyUSB0', vcc = 5.0, filename = 'nulls_data.csv',
-              vcc_un = 0.05, resolution = 10, json = 'json.json', samples = 400)
+    x = Nulls(number = 8, port = '/dev/ttyUSB0', vcc = 6.144, filename = 'nulls_data_3D.csv',
+              vcc_un = 0.005, resolution = 15, json = '3D_calib_setup.json', samples = 100)

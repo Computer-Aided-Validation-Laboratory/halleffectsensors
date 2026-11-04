@@ -19,10 +19,10 @@ def read_data(port: str, filename: str, samples: int = 400) -> None:
     Returns:
         None
     '''
-    ser = serial.Serial(port, 9600)
+    ser = serial.Serial(port, 115200)
     ser.reset_input_buffer()
     time.sleep(2)
-    script_dir = Path(__file__).parent
+    script_dir = Path(__file__).parent/'calib_data'
     csv_file = script_dir / filename
 
     with open(csv_file, 'w', newline = '', encoding = 'utf-8') as csvfile:
@@ -79,7 +79,7 @@ def split_data(port: str, filename: str, samples: int, input_json: json) -> pd.D
         num_z (int): the number of sensors in the array facing the 'z' direction
     '''
 
-    path_json = Path(__file__).parent.parent.parent /'jsons'
+    path_json = Path(__file__).parent
     output_json = path_json/input_json
 
     with open(output_json, encoding = 'utf-8') as f:
@@ -87,8 +87,8 @@ def split_data(port: str, filename: str, samples: int, input_json: json) -> pd.D
 
     # print(sensor_data)
 
-    # total_input_df = read_data(port, filename, samples)
-    data_path =  Path(__file__).resolve().with_name('fake_data.csv')
+    #total_input_df = read_data(port, filename, samples)
+    data_path =  Path(__file__).parent /'calib_data'/filename
     total_input_df = pd.read_csv(data_path)
     rows = total_input_df.shape[0]
 

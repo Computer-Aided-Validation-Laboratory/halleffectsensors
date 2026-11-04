@@ -86,10 +86,10 @@ class Sensitivity:
         self.nulls_uncertainties = np.empty(self.number)
         self.stds = np.empty(self.number)
 
-        path_nulls = Path(__file__).resolve().with_name('nulls.csv')
+        path_nulls = Path(__file__).parent/'MM_calib'/'nulls.csv'
         parameters_df = pd.read_csv(path_nulls)
 
-        path_stds = Path(__file__).resolve().with_name('stds.csv')
+        path_stds = Path(__file__).parent/'MM_calib'/'stds.csv'
         stds_df = pd.read_csv(path_stds)
 
         self.nulls = parameters_df.iloc[0].to_numpy()
@@ -134,10 +134,10 @@ class Sensitivity:
         
         uncertainty_in_sensor = 0.5
 
-        #calib_path = Path(__file__).resolve().with_name('fake_data.csv')
-        #self.calibration_data = pd.read_csv(calib_path)
+        calib_path = Path(__file__).parent / 'MM_calib' / 'cal_12(9-12)(17.3-3).csv'
+        self.calibration_data = pd.read_csv(calib_path)
         
-        self.calibration_data = read_data(self.port, self.filename, self.samples)
+        #self.calibration_data = read_data(self.port, self.filename, self.samples)
         uncertainty_sen_frame = self.calibration_data
         
         self.sensitivities = [0]*self.number

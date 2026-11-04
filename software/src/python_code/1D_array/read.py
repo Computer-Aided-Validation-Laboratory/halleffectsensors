@@ -18,7 +18,7 @@ def read_data(port: str, filename: str, samples: int = 200) -> pd.DataFrame:
         df (pd.DataFrame): the data frame that the arduino data is stored in
     '''
 
-    ser = serial.Serial(port, 9600)
+    ser = serial.Serial(port, 115200)
     ser.reset_input_buffer()
     time.sleep(2)
     script_dir = Path(__file__).parent

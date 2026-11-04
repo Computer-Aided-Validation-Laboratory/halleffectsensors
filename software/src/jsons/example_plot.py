@@ -21,6 +21,7 @@ class Plotting:
         drection (str): either "x", "y", or "z" depending on which field you want visualised
         json_file (str): the file containing correct information about this sensor array
         data (str): the data that is going to be plotted
+        bits (int): bit depth of ADC used to ensure correct conversion of data
 
     Methods:
         get_data() -> None:
@@ -28,22 +29,29 @@ class Plotting:
         split_data() -> None:
             calculates how many of each directioned sensor is present and creates data
             frames for each direction and stores the correct data in it
+        get_nulls_and_sens() -> None:
+            gets the correct nulls and sensitivity values for the direction of data we are
+            plotting and saves them
+        convert() -> None:
+            converts the input data to magnetic field measurements based on the correct
+            nulls and sensitivities
         plot_map() -> None:
             plots the field map at every timestamp for the specified direction.
     '''
 
-    def __init__(self, json_file: str, data: str, direction:str):
+    def __init__(self, json_file:str, data:str, direction:str, bits:int):
         
         self.direction = direction
+        self.bits = (2**bits)
 
         self.num_x = 0
         self.num_y = 0
         self.num_z = 0
 
-        data_path = Path(__file__).parent/data
+        data_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'calib_data'/data
         self.data = pd.read_csv(data_path)
 
-        json_path = Path(__file__).parent/json_file
+        json_path = Path(__file__).parent.parent/'python_code'/'3D_array'/json_file
         with open(json_path, encoding = 'utf-8') as f:
             self.json = json.load(f)
 
@@ -63,6 +71,9 @@ class Plotting:
         self.title = None
         self.rows = None
         self.all_z = None
+
+        self.sens = None
+        self.nulls = None
 
     def split_data(self) -> None:
         '''
@@ -93,9 +104,6 @@ class Plotting:
         self.y_data[self.y_data.columns[0]] = self.data[self.data.columns[0]]
         self.z_data[self.z_data.columns[0]] = self.data[self.data.columns[0]]
 
-        for i in range((self.data.shape[1]-1)):
-            self.data[self.data.columns[i+1]] = ((self.data[self.data.columns[i+1]]-512)*5/1023)*1000/31.25
-
         i = x = y = z = 0
 
         for sensor in self.json["sensors"]:
@@ -111,11 +119,10 @@ class Plotting:
                     self.z_data[self.z_data.columns[z+1]] = self.data[self.data.columns[i]]
                     z+=1
 
-
-    def plot_map(self) -> None:
+    def get_nulls_and_sens(self) -> None:
         '''
-        determines which direction of field is wanting to be plotted, plots the animation
-        and saves it as an mp4 file
+        choses which sensitivity values and which null voltages to use (x, y or z) based on the
+        input direction and saves them to be used in the convert method
         Args:
             None
         Returns:
@@ -132,6 +139,82 @@ class Plotting:
             self.data = self.z_data
             self.number = self.num_z
 
+        self.sens = np.empty(self.number)
+        self.nulls = np.empty(self.number)
+
+        if self.direction == "x":
+            sens_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/'x_sens.csv'
+        elif self.direction == "y":
+            sens_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/'y_sens.csv'
+        else:
+            sens_path = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/'z_sens.csv'
+
+        sens_df = pd.read_csv(sens_path, header = None)
+
+        for i in range(self.number):
+            self.sens[i] = (np.mean(sens_df[sens_df.columns[i]]))
+
+        if self.json == '3D_calib_setup.json':
+            nulls_file = 'nulls_and_uncertainties.csv'
+        else:
+            nulls_file = 'nulls_and_uns_1.csv'
+        nulls_paths = Path(__file__).parent.parent/'python_code'/'3D_array'/'csv'/nulls_file
+        nulls_df = pd.read_csv(nulls_paths, header = None)
+
+        directions = nulls_df.shape[0] / 2
+
+        if directions == 1:
+            self.nulls = nulls_df.iloc[0]
+        elif directions == 2:
+            if self.num_x == 0:
+                if self.direction == "y":
+                    self.nulls = nulls_df.iloc[0]
+                else:
+                    self.nulls = nulls_df.iloc[1]
+            elif self.num_y == 0:
+                if self.direction == "x":
+                    self.nulls = nulls_df.iloc[0]
+                else:
+                    self.nulls = nulls_df.iloc[1]
+            elif self.num_z == 0:
+                if self.direction == "y":
+                    self.nulls = nulls_df.iloc[0]
+                else:
+                    self.nulls = nulls_df.iloc[1]
+        elif directions == 3:
+            if self.direction == "x":
+                self.nulls = nulls_df.iloc[0]
+            elif self.direction == "y":
+                self.nulls = nulls_df.iloc[1]
+            else:
+                self.nulls = nulls_df.iloc[2]
+            
+    def convert(self) -> None:
+        '''
+        converts the data using sensitivity and null voltages measured from the calibration
+        to be plotted as a magnetic field
+        Args:
+            None
+        Returns:
+            None
+        '''
+
+        for i in range(self.number):
+            self.data[self.data.columns[i+1]] = self.data[self.data.columns[i+1]]*6.144/self.bits
+            self.data[self.data.columns[i+1]] = self.data[self.data.columns[i+1]]-self.nulls[i]
+            self.data[self.data.columns[i+1]] = self.data[self.data.columns[i+1]]*1000/self.sens[i]
+
+        self.data = abs(self.data)
+
+    def plot_map(self) -> None:
+        '''
+        plots the animation and saves it as an mp4 file
+        Args:
+            None
+        Returns:
+            None
+        '''
+
         self.x_coords = np.empty(self.number)
         self.y_coords = np.empty(self.number)
         index = 0
@@ -144,7 +227,6 @@ class Plotting:
 
         vmin = self.data.iloc[:, 1:].min().min()
         vmax = self.data.iloc[:, 1:].max().max()
-
 
         x_max = self.x_coords[0]
         x_min = self.x_coords[0]
@@ -182,6 +264,7 @@ class Plotting:
         cbar.set_label("field strengths (mT)")
 
         self.title = ax.set_title(f"t = {self.timestamps[0]:.2f} s")
+        print(self.title)
         ax.set_xlabel("x")
         ax.set_ylabel("y")
 
@@ -194,7 +277,7 @@ class Plotting:
 
     def update(self, frame: int) -> None:
         '''
-        update function for the animation.FuncAnimation in run()
+        update function for the animation.FuncAnimation in run() method
         Args:
             frame (int): determines the length of the animation
         Returns:
@@ -215,15 +298,17 @@ class Plotting:
             None
         '''
         self.split_data()
+        self.get_nulls_and_sens()
+        self.convert()
         self.plot_map()
 
-        ani = animation.FuncAnimation(self.fig, self.update, frames=self.rows, interval=100, blit =True )
+        ani = animation.FuncAnimation(self.fig, self.update, frames=self.rows, interval=100, blit =True)
         plt.show()
-        writer = animation.FFMpegWriter(fps=10, bitrate=1800)
+        writer = animation.FFMpegWriter(fps=20, bitrate=1800)
         save_path = Path(__file__).parent/filename
         ani.save(save_path, writer = writer)
 
 
 if __name__ == "__main__":
-    a = Plotting(json_file = 'calib.json',data = 'cal_9(6-12)(11.1).csv', direction = "z" )
+    a = Plotting(json_file = '1D_calib_setup.json', data = 'cal_7.csv', direction = "z", bits = 15)
     a.run(filename = 'animation.mp4')
