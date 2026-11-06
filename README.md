@@ -21,29 +21,29 @@ software/
 ### Structure of `software/`
 ```
 software/
-|---- overview.md                        # overview of software directory (linked above)
-|---- uncertainty_quantification.md      # details uncertainty calculations through the code
+|---- overview.md                            # overview of software directory (linked above)
+|---- uncertainty_quantification.md          # details uncertainty calculations through the code
 |---- src/
-|     |---- arduino_code/                 # for data reading
+|     |---- arduino_code/                    # for data reading
 |           |---- extended_code/
-|                 |---- extended_code.ino # Arduino code for larger array (uses ADS115 library)
+|                 |---- extended_circuit.ino # Arduino code for larger array (uses ADS115 library)
 |           |---- initial_code/
-|                 |---- initial_code.ino  # Arduino code for initial setup (less than 9 sensors)
-|     |---- python_code/                  # for data processing/interpretation
+|                 |---- initial_circuit.ino  # Arduino code for initial setup (less than 9 sensors)
+|     |---- python_code/                     # for data processing/interpretation
 |           |---- 1D_array/
-|                 |---- fields.py         # does the data conversion
-|                 |---- nulls.py          # calculates the nulls
-|                 |---- read.py           # reads in the data from sensor
-|                 |---- sens.py           # calculates the sensitivity
+|                 |---- fields.py            # does the data conversion
+|                 |---- nulls.py             # calculates the nulls
+|                 |---- read.py              # reads in the data from sensor
+|                 |---- sens.py              # calculates the sensitivity
 |           |---- 3D_array/
-|                 |---- 3D_fields.py      # does data conversion for 3D array
-|                 |---- 3D_nulls.py       # calculates the nulls for 3D array
-|                 |---- 3D_sens.py        # calculates the sensitivities for 3D array
-|                 |---- func.py           # reads data from Arduino and splits based on direction
-|---- interpolation_methods/              # for data visualisation
+|                 |---- 3D_fields.py         # does data conversion for 3D array
+|                 |---- 3D_nulls.py          # calculates the nulls for 3D array
+|                 |---- 3D_sens.py           # calculates the sensitivities for 3D array
+|                 |---- func.py              # reads data from Arduino and splits based on direction
+|---- interpolation_methods/                 # for data visualisation
 |---- jsons/
-|      |---- json_formatting.md           # details instructions for making custom jsons
-|      |---- indexes.md                   # identifies which index corresponds to which electronic address
+|      |---- json_formatting.md              # details instructions for making custom jsons
+|      |---- indexes.md                      # identifies which index corresponds to which electronic address
 
 ```
 ### Structure of `hardware/`
