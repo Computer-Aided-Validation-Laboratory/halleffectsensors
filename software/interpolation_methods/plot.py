@@ -302,7 +302,7 @@ class Plotting:
 
         ani = animation.FuncAnimation(self.fig, self.update, frames=self.rows, interval=100, blit =True)
         plt.show()
-        writer = animation.FFMpegWriter(fps=20, bitrate=1800)
+        writer = animation.FFMpegWriter(fps=6, bitrate=1800)
         save_path = Path(__file__).parent/filename
         ani.save(save_path, writer = writer)
 
