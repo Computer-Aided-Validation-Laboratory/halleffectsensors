@@ -4,8 +4,7 @@
 #define TCA_ADDR 0x70
 #define ADS_ADDR 0x48
 
-const uint8_t NUM_ADCS = 4;
-
+const uint8_t NUM_ADCS = 6;
 Adafruit_ADS1115 ads;
 
 void tcaSelect(uint8_t channel) {
@@ -44,7 +43,15 @@ void setup() {
 
     Serial.print(",ADC");
     Serial.print(adc_num);
+    Serial.print("_A1");
+
+    Serial.print(",ADC");
+    Serial.print(adc_num);
     Serial.print("_A2");
+
+    Serial.print(",ADC");
+    Serial.print(adc_num);
+    Serial.print("_A3");
   }
 
   Serial.println();
@@ -63,13 +70,21 @@ void loop() {
     delay(1);
 
     int16_t A0 = ads.readADC_SingleEnded(0);
+    int16_t A1 = ads.readADC_SingleEnded(1);
     int16_t A2 = ads.readADC_SingleEnded(2);
+    int16_t A3 = ads.readADC_SingleEnded(3);
 
     Serial.print(",");
     Serial.print(A0);
 
     Serial.print(",");
+    Serial.print(A1);
+
+    Serial.print(",");
     Serial.print(A2);
+
+    Serial.print(",");
+    Serial.print(A3);
   }
 
   Serial.println();
