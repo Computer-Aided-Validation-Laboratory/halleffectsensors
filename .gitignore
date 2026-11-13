@@ -25,3 +25,6 @@ __pycache__/
 *.FCStd
 *.FCBak
 
+# specific files to ommit
+initial_circuit.ino.ino
+Extended_circuit.ino.ino
