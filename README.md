@@ -32,7 +32,7 @@ software/
 |     |---- example.json                     # example json to ensure custom jsons are fomatted correctly
 |     |---- indexes.md                       # information on how to index sensor arrays in a compatible way
 |     |---- formatting.md                    # instructions for formatting the json file
-|---- **src/**
+|---- src/
 |     |---- arduino_code/
 |           |---- arduino_code.ino           # microcontroller code to read sensor array
 |     |---- python_code/                
