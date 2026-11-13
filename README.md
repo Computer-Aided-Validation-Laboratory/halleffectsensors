@@ -21,31 +21,31 @@ software/
 ### Structure of `software/`
 ```
 software/
- |---- overview.md                            # overview of software directory (linked above)
- |---- calculations.md                        # details uncertainty calculations through the code
- |---- interpolation_methods/
- |     |---- animation.mp4                    # saved animation of field visualisation
- |     |---- calib.json                       # json file storing the setup being visualised
- |     |---- overview.md                      # overview of the interpolation method
- |     |---- plot.py                          # python code that plots the field map
- |---- jsons/
- |     |---- example.json                     # example json to ensure custom jsons are fomatted correctly
- |     |---- indexes.md                       # information on how to index sensor arrays in a compatible way
- |     |---- formatting.md                    # instructions for formatting the json file
- |---- **src/**
- |     |---- arduino_code/
- |           |---- arduino_code.ino           # microcontroller code to read sensor array
- |     |---- python_code/                
- |           |---- 1D_array/
- |                 |---- fields.py            # does the data conversion
- |                 |---- nulls.py             # calculates the nulls
- |                 |---- read.py              # reads in the data from sensor
- |                 |---- sens.py              # calculates the sensitivity
- |           |---- 3D_array/
- |                 |---- 3D_fields.py         # does data conversion for 3D array
- |                 |---- 3D_nulls.py          # calculates the nulls for 3D array
- |                 |---- 3D_sens.py           # calculates the sensitivities for 3D array
- |                 |---- func.py              # reads data from Arduino and splits based on direction
+|---- overview.md                            # overview of software directory (linked above)
+|---- calculations.md                        # details uncertainty calculations through the code
+|---- interpolation_methods/
+|     |---- animation.mp4                    # saved animation of field visualisation
+|     |---- calib.json                       # json file storing the setup being visualised
+|     |---- overview.md                      # overview of the interpolation method
+|     |---- plot.py                          # python code that plots the field map
+|---- jsons/
+|     |---- example.json                     # example json to ensure custom jsons are fomatted correctly
+|     |---- indexes.md                       # information on how to index sensor arrays in a compatible way
+|     |---- formatting.md                    # instructions for formatting the json file
+|---- **src/**
+|     |---- arduino_code/
+|           |---- arduino_code.ino           # microcontroller code to read sensor array
+|     |---- python_code/                
+|           |---- 1D_array/
+|                 |---- fields.py            # does the data conversion
+|                 |---- nulls.py             # calculates the nulls
+|                 |---- read.py              # reads in the data from sensor
+|                 |---- sens.py              # calculates the sensitivity
+|           |---- 3D_array/
+|                 |---- 3D_fields.py         # does data conversion for 3D array
+|                 |---- 3D_nulls.py          # calculates the nulls for 3D array
+|                 |---- 3D_sens.py           # calculates the sensitivities for 3D array
+|                 |---- func.py              # reads data from Arduino and splits based on direction
 ```
 ### Structure of `hardware/`
 ```
