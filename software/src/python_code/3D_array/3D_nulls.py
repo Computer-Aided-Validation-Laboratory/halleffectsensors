@@ -200,4 +200,4 @@ class Nulls:
 
 if __name__ == '__main__':
     x = Nulls(number = 8, port = '/dev/ttyUSB0', vcc = 6.144, filename = 'nulls_data.csv',
-              vcc_un = 0.005, resolution = 15, json = '1D_calib_setup.json', samples = 100)
+              vcc_un = 0.005, resolution = 15, json = '3D_calib_setup.json', samples = 100)
